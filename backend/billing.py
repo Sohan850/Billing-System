@@ -39,53 +39,41 @@ def create_bill():
 
     data = request.get_json(silent=True)
 
-    # Validate JSON request
     if not isinstance(data, dict):
-        return jsonify({
-            "message": "Invalid request data"
-        }), 400
+        return jsonify({"message": "Invalid request data"}), 400
 
     customer_id = data.get('customer_id')
+    coupon_code = data.get('coupon_code')
     items = data.get('items')
 
-    # Validate items
     if not isinstance(items, list) or not items:
-        return jsonify({
-            "message": "At least one product is required"
-        }), 400
+        return jsonify({"message": "At least one product is required"}), 400
 
-    # Validate customer ID if provided
     if customer_id is not None:
-
         try:
             customer_id = validate_positive_integer(customer_id)
-
         except (ValueError, TypeError):
+            return jsonify({"message": "Invalid customer ID"}), 400
+
+    if coupon_code is not None:
+        if not isinstance(coupon_code, str) or not coupon_code.strip():
+            return jsonify({"message": "Invalid coupon code"}), 400
+        coupon_code = coupon_code.strip().upper()
+        if customer_id is None:
             return jsonify({
-                "message": "Invalid customer ID"
+                "message": "A registered customer is required to redeem a coupon"
             }), 400
 
-    # Combine duplicate product entries
     product_quantities = {}
-
     try:
         for item in items:
-
             if not isinstance(item, dict):
                 raise ValueError
-
-            product_id = validate_positive_integer(
-                item.get('product_id')
-            )
-
-            quantity = validate_positive_integer(
-                item.get('quantity')
-            )
-
+            product_id = validate_positive_integer(item.get('product_id'))
+            quantity = validate_positive_integer(item.get('quantity'))
             product_quantities[product_id] = (
                 product_quantities.get(product_id, 0) + quantity
             )
-
     except (ValueError, TypeError):
         return jsonify({
             "message": "Product ID and quantity must be positive integers"
@@ -98,59 +86,39 @@ def create_bill():
 
         with connection.cursor() as cursor:
 
-            # Check customer if provided
             if customer_id is not None:
-
                 cursor.execute(
-                    """
-                    SELECT customer_id
-                    FROM customers
-                    WHERE customer_id = %s
-                    """,
+                    "SELECT customer_id FROM customers WHERE customer_id = %s FOR UPDATE",
                     (customer_id,)
                 )
-
                 if not cursor.fetchone():
-                    return jsonify({
-                        "message": "Customer not found"
-                    }), 404
+                    connection.rollback()
+                    return jsonify({"message": "Customer not found"}), 404
 
-            # Lock product rows and check stock
             product_details = {}
-            total_amount = Decimal('0.00')
+            subtotal_amount = Decimal('0.00')
 
             for product_id in sorted(product_quantities):
-
                 cursor.execute(
                     """
-                    SELECT
-                        product_id,
-                        product_name,
-                        selling_price,
-                        stock_quantity
+                    SELECT product_id, product_name, selling_price, stock_quantity
                     FROM products
                     WHERE product_id = %s
                     FOR UPDATE
                     """,
                     (product_id,)
                 )
-
                 product = cursor.fetchone()
 
                 if not product:
                     connection.rollback()
-
                     return jsonify({
                         "message": f"Product ID {product_id} not found"
                     }), 404
 
                 quantity = product_quantities[product_id]
-
-                # Check available stock
                 if product['stock_quantity'] < quantity:
-
                     connection.rollback()
-
                     return jsonify({
                         "message": "Insufficient stock",
                         "product_name": product['product_name'],
@@ -158,63 +126,117 @@ def create_bill():
                         "requested_quantity": quantity
                     }), 400
 
-                # Validate selling price
                 try:
-                    unit_price = Decimal(
-                        str(product['selling_price'])
-                    )
-
+                    unit_price = Decimal(str(product['selling_price']))
                     if not unit_price.is_finite() or unit_price < 0:
                         raise InvalidOperation
-
                 except (InvalidOperation, ValueError, TypeError):
                     connection.rollback()
-
                     return jsonify({
                         "message": "Invalid product selling price"
                     }), 500
 
-                # Calculate subtotal
-                subtotal = (unit_price * quantity).quantize(
-                    Decimal('0.01')
-                )
-
-                total_amount += subtotal
-
+                line_subtotal = (unit_price * quantity).quantize(Decimal('0.01'))
+                subtotal_amount += line_subtotal
                 product_details[product_id] = {
                     "product_name": product['product_name'],
                     "quantity": quantity,
                     "unit_price": unit_price,
-                    "subtotal": subtotal
+                    "subtotal": line_subtotal
                 }
 
-            total_amount = total_amount.quantize(
+            subtotal_amount = subtotal_amount.quantize(Decimal('0.01'))
+
+            # Apply the highest active membership discount.
+            membership_type = None
+            membership_rate = Decimal('0.00')
+            if customer_id is not None:
+                cursor.execute(
+                    """
+                    SELECT membership_type
+                    FROM memberships
+                    WHERE customer_id = %s
+                      AND status = 'Active'
+                      AND start_date <= CURDATE()
+                      AND (end_date IS NULL OR end_date >= CURDATE())
+                    ORDER BY CASE LOWER(membership_type)
+                        WHEN 'platinum' THEN 3
+                        WHEN 'gold' THEN 2
+                        WHEN 'silver' THEN 1
+                        ELSE 0
+                    END DESC
+                    LIMIT 1
+                    """,
+                    (customer_id,)
+                )
+                membership = cursor.fetchone()
+                if membership:
+                    membership_type = membership['membership_type']
+                    rates = {
+                        'silver': Decimal('0.02'),
+                        'gold': Decimal('0.05'),
+                        'platinum': Decimal('0.10')
+                    }
+                    membership_rate = rates.get(
+                        membership_type.lower(), Decimal('0.00')
+                    )
+
+            membership_discount = (subtotal_amount * membership_rate).quantize(
+                Decimal('0.01')
+            )
+            amount_after_membership = subtotal_amount - membership_discount
+
+            # Validate and apply one optional reward coupon.
+            coupon_discount = Decimal('0.00')
+            redeemed_coupon_id = None
+            if coupon_code:
+                cursor.execute(
+                    """
+                    SELECT coupon_id, discount_amount
+                    FROM reward_coupons
+                    WHERE coupon_code = %s
+                      AND customer_id = %s
+                      AND status = 'Available'
+                    FOR UPDATE
+                    """,
+                    (coupon_code, customer_id)
+                )
+                coupon = cursor.fetchone()
+                if not coupon:
+                    connection.rollback()
+                    return jsonify({
+                        "message": "Coupon is invalid, already redeemed, or belongs to another customer"
+                    }), 400
+
+                coupon_value = Decimal(str(coupon['discount_amount']))
+                coupon_discount = min(coupon_value, amount_after_membership)
+                redeemed_coupon_id = coupon['coupon_id']
+
+            total_discount = membership_discount + coupon_discount
+            total_amount = (subtotal_amount - total_discount).quantize(
                 Decimal('0.01')
             )
 
-            # Create main sales record
             cursor.execute(
                 """
                 INSERT INTO sales
-                (customer_id, user_id, total_amount)
-                VALUES (%s, %s, %s)
+                    (customer_id, user_id, total_amount, discount_amount)
+                VALUES (%s, %s, %s, %s)
                 """,
                 (
                     customer_id,
                     session['user_id'],
-                    total_amount
+                    total_amount,
+                    total_discount
                 )
             )
-
             sale_id = cursor.lastrowid
 
-            # Insert sale items and reduce stock
             for product_id, details in product_details.items():
-
                 cursor.execute(
                     """
                     INSERT INTO sale_items
-                    (sale_id, product_id, quantity, unit_price, subtotal)
+                        (sale_id, product_id, quantity, unit_price, subtotal)
                     VALUES (%s, %s, %s, %s, %s)
                     """,
                     (
@@ -225,35 +247,85 @@ def create_bill():
                         details['subtotal']
                     )
                 )
-
                 cursor.execute(
                     """
                     UPDATE products
                     SET stock_quantity = stock_quantity - %s
                     WHERE product_id = %s
                     """,
-                    (
-                        details['quantity'],
-                        product_id
-                    )
+                    (details['quantity'], product_id)
                 )
 
-        # Save all changes together
+            if redeemed_coupon_id is not None:
+                cursor.execute(
+                    """
+                    UPDATE reward_coupons
+                    SET status = 'Redeemed',
+                        redeemed_at = CURRENT_TIMESTAMP,
+                        redeemed_sale_id = %s
+                    WHERE coupon_id = %s
+                    """,
+                    (sale_id, redeemed_coupon_id)
+                )
+
+            issued_coupons = []
+            if customer_id is not None:
+                cursor.execute(
+                    "SELECT COALESCE(SUM(total_amount), 0) AS lifetime_spend FROM sales WHERE customer_id = %s",
+                    (customer_id,)
+                )
+                lifetime_spend = Decimal(str(cursor.fetchone()['lifetime_spend']))
+
+                reward_levels = [
+                    (Decimal('5000.00'), Decimal('200.00')),
+                    (Decimal('10000.00'), Decimal('500.00'))
+                ]
+
+                for threshold, reward_value in reward_levels:
+                    if lifetime_spend >= threshold:
+                        cursor.execute(
+                            """
+                            SELECT coupon_id
+                            FROM reward_coupons
+                            WHERE customer_id = %s AND threshold_amount = %s
+                            """,
+                            (customer_id, threshold)
+                        )
+                        if not cursor.fetchone():
+                            import secrets
+                            new_coupon_code = 'REWARD-' + secrets.token_hex(4).upper()
+                            cursor.execute(
+                                """
+                                INSERT INTO reward_coupons
+                                    (customer_id, coupon_code, threshold_amount, discount_amount)
+                                VALUES (%s, %s, %s, %s)
+                                """,
+                                (customer_id, new_coupon_code, threshold, reward_value)
+                            )
+                            issued_coupons.append({
+                                "coupon_code": new_coupon_code,
+                                "threshold_amount": str(threshold),
+                                "discount_amount": str(reward_value)
+                            })
+
         connection.commit()
 
         return jsonify({
             "message": "Bill created successfully",
             "sale_id": sale_id,
-            "total_amount": str(total_amount)
+            "subtotal_amount": str(subtotal_amount),
+            "membership_type": membership_type,
+            "membership_discount": str(membership_discount),
+            "coupon_discount": str(coupon_discount),
+            "discount_amount": str(total_discount),
+            "total_amount": str(total_amount),
+            "issued_coupons": issued_coupons
         }), 201
 
     except Exception:
         if connection:
             connection.rollback()
-
-        return jsonify({
-            "message": "Could not create bill"
-        }), 500
+        return jsonify({"message": "Could not create bill"}), 500
 
     finally:
         if connection:
@@ -284,6 +356,7 @@ def get_all_sales():
                     s.user_id,
                     u.username,
                     s.total_amount,
+                    s.discount_amount,
                     s.sale_date
                 FROM sales s
                 LEFT JOIN customers c
@@ -299,6 +372,7 @@ def get_all_sales():
         # Convert Decimal amounts into JSON-safe strings
         for sale in sales:
             sale['total_amount'] = str(sale['total_amount'])
+            sale['discount_amount'] = str(sale['discount_amount'])
 
         return jsonify({
             "message": "Sales retrieved successfully",
@@ -340,6 +414,7 @@ def get_bill_details(sale_id):
                     s.user_id,
                     u.username,
                     s.total_amount,
+                    s.discount_amount,
                     s.sale_date
                 FROM sales s
                 LEFT JOIN customers c
@@ -381,6 +456,7 @@ def get_bill_details(sale_id):
 
         # Convert Decimal values into JSON-safe strings
         sale['total_amount'] = str(sale['total_amount'])
+        sale['discount_amount'] = str(sale['discount_amount'])
 
         for item in sale_items:
             item['unit_price'] = str(item['unit_price'])

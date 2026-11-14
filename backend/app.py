@@ -69,6 +69,26 @@ def products_page():
 def billing_page():
     return render_template('billing.html')
 
+@app.route('/customers')
+@login_required
+def customers_page():
+    return render_template('customers.html')
+
+@app.route('/purchases')
+@login_required
+def purchases_page():
+    return render_template('purchases.html')
+
+@app.route('/memberships')
+@login_required
+def memberships_page():
+    return render_template('memberships.html')
+
+@app.route('/reports')
+@login_required
+def reports_page():
+    return render_template('reports.html')
+
 # Run Flask application
 if __name__ == '__main__':
     app.run(debug=True)

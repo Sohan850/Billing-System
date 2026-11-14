@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Purchase Management</h2>
+    <a href="/dashboard" class="btn btn-secondary">
+        Back to Dashboard
+    </a>
+</div>
+
+<!-- Purchase History -->
+<div class="card">
+
+    <div class="card-header">
+        <h5 class="mb-0">Purchase History</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>Purchase ID</th>
+                        <th>Product Name</th>
+                        <th>SKU</th>
+                        <th>Quantity</th>
+                        <th>Cost Price</th>
+                        <th>Total Cost</th>
+                        <th>Purchased By</th>
+                        <th>Purchase Date</th>
+                    </tr>
+                </thead>
+
+                <tbody id="purchaseTable">
+                </tbody>
+
+            </table>
+        </div>
+
+        <div id="purchaseMessage"></div>
+
+    </div>
+</div>
+
+{% endblock %}
