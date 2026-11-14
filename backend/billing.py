@@ -425,7 +425,6 @@ def get_all_sales():
         # Convert Decimal amounts into JSON-safe strings
         for sale in sales:
             sale['total_amount'] = str(sale['total_amount'])
-        sale['discount_amount'] = str(sale['discount_amount'])
             sale['discount_amount'] = str(sale['discount_amount'])
 
         return jsonify({
@@ -468,6 +467,7 @@ def get_bill_details(sale_id):
                     s.user_id,
                     u.username,
                     s.total_amount,
+                    s.discount_amount,
                     s.sale_date
                 FROM sales s
                 LEFT JOIN customers c
@@ -509,6 +509,7 @@ def get_bill_details(sale_id):
 
         # Convert Decimal values into JSON-safe strings
         sale['total_amount'] = str(sale['total_amount'])
+        sale['discount_amount'] = str(sale['discount_amount'])
 
         for item in sale_items:
             item['unit_price'] = str(item['unit_price'])
