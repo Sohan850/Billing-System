@@ -386,7 +386,74 @@ def create_bill():
 
 
 # --------------------------------------------------
-# 2. VIEW ALL SALES
+# 2. VIEW AVAILABLE REWARD COUPONS
+# --------------------------------------------------
+
+@billing_bp.route('/coupons/<int:customer_id>', methods=['GET'])
+@login_required
+def get_customer_coupons(customer_id):
+
+    connection = None
+
+    try:
+        connection = get_db_connection()
+
+        with connection.cursor() as cursor:
+
+            # Confirm that the customer exists.
+            cursor.execute(
+                "SELECT customer_id FROM customers WHERE customer_id = %s",
+                (customer_id,)
+            )
+
+            if not cursor.fetchone():
+                return jsonify({
+                    "message": "Customer not found"
+                }), 404
+
+            # Retrieve only coupons that can still be used.
+            cursor.execute(
+                """
+                SELECT
+                    coupon_id,
+                    coupon_code,
+                    threshold_amount,
+                    discount_amount,
+                    issued_at,
+                    status
+                FROM reward_coupons
+                WHERE customer_id = %s
+                  AND status = 'Available'
+                ORDER BY issued_at DESC, coupon_id DESC
+                """,
+                (customer_id,)
+            )
+
+            coupons = cursor.fetchall()
+
+        # Convert Decimal and datetime values for JSON responses.
+        for coupon in coupons:
+            coupon['threshold_amount'] = str(coupon['threshold_amount'])
+            coupon['discount_amount'] = str(coupon['discount_amount'])
+            coupon['issued_at'] = str(coupon['issued_at'])
+
+        return jsonify({
+            "message": "Available reward coupons retrieved successfully",
+            "coupons": coupons
+        }), 200
+
+    except Exception:
+        return jsonify({
+            "message": "Could not retrieve reward coupons"
+        }), 500
+
+    finally:
+        if connection:
+            connection.close()
+
+
+# --------------------------------------------------
+# 3. VIEW ALL SALES
 # --------------------------------------------------
 
 @billing_bp.route('/all', methods=['GET'])
@@ -443,7 +510,7 @@ def get_all_sales():
 
 
 # --------------------------------------------------
-# 3. VIEW INDIVIDUAL BILL DETAILS
+# 4. VIEW INDIVIDUAL BILL DETAILS
 # --------------------------------------------------
 
 @billing_bp.route('/<int:sale_id>', methods=['GET'])
