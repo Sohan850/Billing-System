@@ -577,6 +577,89 @@ function removeBillItem(index) {
 
 
 // =====================================
+// PURCHASE REWARD COUPONS
+// =====================================
+
+// Load the selected customer's available coupons.
+async function loadCustomerCoupons() {
+
+    const customerId = document.getElementById("customerId").value.trim();
+    const couponSelect = document.getElementById("couponCode");
+    const message = document.getElementById("couponMessage");
+
+    if (!customerId || !Number.isInteger(Number(customerId)) || Number(customerId) <= 0) {
+        message.textContent = "Enter a valid customer ID first.";
+        couponSelect.innerHTML = '<option value="">Do not apply a coupon</option>';
+        return;
+    }
+
+    message.textContent = "Loading available coupons...";
+    couponSelect.disabled = true;
+
+    try {
+        const response = await fetch(
+            `/api/billing/coupons/${encodeURIComponent(customerId)}`,
+            {
+                method: "GET",
+                credentials: "same-origin"
+            }
+        );
+
+        const result = await response.json();
+
+        couponSelect.innerHTML = '<option value="">Do not apply a coupon</option>';
+
+        if (!response.ok) {
+            message.textContent = result.message || "Could not load coupons.";
+            return;
+        }
+
+        if (!result.coupons || result.coupons.length === 0) {
+            message.textContent = "This customer has no available reward coupons.";
+            return;
+        }
+
+        result.coupons.forEach(coupon => {
+            const option = document.createElement("option");
+            option.value = coupon.coupon_code;
+            option.textContent =
+                `${coupon.coupon_code} - ₹${coupon.discount_amount} off (₹${coupon.threshold_amount} spending milestone)`;
+            couponSelect.appendChild(option);
+        });
+
+        message.textContent =
+            `${result.coupons.length} available reward coupon(s) found.`;
+
+    } catch (error) {
+        message.textContent = "Could not connect to the server.";
+    } finally {
+        couponSelect.disabled = false;
+    }
+}
+
+
+// Clear previously loaded coupons whenever the customer ID changes.
+const billingCustomerInput = document.getElementById("customerId");
+
+if (billingCustomerInput) {
+    billingCustomerInput.addEventListener("input", function() {
+        const couponSelect = document.getElementById("couponCode");
+        const couponMessage = document.getElementById("couponMessage");
+
+        if (couponSelect) {
+            couponSelect.innerHTML =
+                '<option value="">Do not apply a coupon</option>';
+        }
+
+        if (couponMessage) {
+            couponMessage.textContent =
+                "Customer ID changed. Load coupons again.";
+        }
+    });
+}
+
+
+// =====================================
 // GENERATE BILL
 // =====================================
 
@@ -590,10 +673,15 @@ async function createBill() {
     const customerValue =
         document.getElementById("customerId").value.trim();
 
+    const selectedCoupon =
+        document.getElementById("couponCode").value;
+
     const billData = {
         customer_id: customerValue === ""
             ? null
             : Number(customerValue),
+
+        coupon_code: selectedCoupon || null,
 
         items: billItems.map(item => ({
             product_id: item.product_id,
@@ -625,11 +713,22 @@ async function createBill() {
 
         if (response.ok) {
 
+            const newlyIssuedRewards = (result.new_reward_coupons || []).map(coupon => `
+                <li>${coupon.coupon_code} - ₹${coupon.discount_amount} coupon (₹${coupon.threshold_amount} spending milestone)</li>
+            `).join("");
+
             message.innerHTML = `
                 <div class="alert alert-success">
-                    Bill created successfully!<br>
+                    <strong>Bill created successfully!</strong><br>
                     Sale ID: ${result.sale_id}<br>
-                    Total: ₹${result.total_amount}
+                    Subtotal: ₹${result.subtotal_amount}<br>
+                    Membership: ${result.membership_type || "None"}<br>
+                    Membership discount: ₹${result.membership_discount}<br>
+                    Coupon discount: ₹${result.coupon_discount}<br>
+                    Total discount: ₹${result.discount_amount}<br>
+                    <strong>Final amount: ₹${result.total_amount}</strong>
+                    ${result.redeemed_coupon ? `<br>Coupon redeemed: ${result.redeemed_coupon}` : ""}
+                    ${newlyIssuedRewards ? `<hr><strong>New reward coupon(s) issued:</strong><ul class="mb-0">${newlyIssuedRewards}</ul>` : ""}
                 </div>
             `;
 
@@ -638,6 +737,10 @@ async function createBill() {
             displayBillItems();
 
             document.getElementById("customerId").value = "";
+            document.getElementById("couponCode").innerHTML =
+                '<option value="">Do not apply a coupon</option>';
+            document.getElementById("couponMessage").textContent =
+                "₹200 reward at ₹5,000 spending and ₹500 reward at ₹10,000 spending.";
 
             await loadBillingProducts();
 
