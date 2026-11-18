@@ -69,7 +69,54 @@
             <a href="/reports" class="btn btn-primary">Reports</a>
         </div>
     </div>
+<!-- Create Cashier Account -->
+<div class="col-md-4">
+    <div class="card p-3">
+        <h5>Create Cashier Account</h5>
 
+        <p>
+            Create a login account for an employee
+            who can access billing only.
+        </p>
+
+        <form id="cashierForm">
+
+            <div class="mb-3">
+                <label class="form-label">Cashier Username</label>
+
+                <input
+                    type="text"
+                    id="cashierUsername"
+                    class="form-control"
+                    minlength="3"
+                    maxlength="50"
+                    placeholder="Enter username"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Temporary Password</label>
+
+                <input
+                    type="password"
+                    id="cashierPassword"
+                    class="form-control"
+                    minlength="8"
+                    placeholder="Minimum 8 characters"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Create Cashier
+            </button>
+
+        </form>
+
+        <div id="cashierMessage" class="mt-3"></div>
+    </div>
+</div>
 </div>
 
 {% endblock %}

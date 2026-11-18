@@ -1,7 +1,7 @@
 
 from flask import Blueprint, jsonify
 from config import get_db_connection
-from auth import login_required
+from auth import admin_required
 
 # Create Purchases Blueprint
 purchases_bp = Blueprint('purchases', __name__)
@@ -9,7 +9,7 @@ purchases_bp = Blueprint('purchases', __name__)
 
 # View Purchase History API
 @purchases_bp.route('/all', methods=['GET'])
-@login_required
+@admin_required
 def get_all_purchases():
 
     connection = None

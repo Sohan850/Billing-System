@@ -32,7 +32,18 @@ if (loginForm) {
                 message.innerHTML =
                     '<div class="alert alert-success">Login successful!</div>';
 
-                window.location.href = "/dashboard";
+                // Redirect according to user role
+                if (result.role === "admin") {
+                    window.location.href = "/dashboard";
+                } 
+                else if (result.role === "cashier") {
+                    window.location.href = "/cashier";
+                } 
+                else {
+                    message.innerHTML =
+                        '<div class="alert alert-danger">Unknown user role.</div>';
+                }
+
             } else {
                 message.innerHTML =
                     `<div class="alert alert-danger">${result.message}</div>`;
@@ -1634,4 +1645,98 @@ async function loadTopProducts() {
             '<div class="alert alert-danger">Could not connect to server.</div>';
 
     }
+}
+// =====================================
+// ADMIN: CREATE CASHIER ACCOUNT
+// =====================================
+
+const cashierForm = document.getElementById("cashierForm");
+
+if (cashierForm) {
+
+    cashierForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const username = document
+            .getElementById("cashierUsername").value.trim();
+
+        const password = document
+            .getElementById("cashierPassword").value;
+
+        const message = document
+            .getElementById("cashierMessage");
+
+        const submitButton = cashierForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        // Validate username
+        if (username.length < 3 || username.length > 50) {
+            message.textContent =
+                "Username must be between 3 and 50 characters.";
+            message.className = "mt-3 alert alert-danger";
+            return;
+        }
+
+        // Validate password
+        if (password.length < 8) {
+            message.textContent =
+                "Password must contain at least 8 characters.";
+            message.className = "mt-3 alert alert-danger";
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating...";
+
+        try {
+
+            const response = await fetch("/api/auth/cashiers", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                credentials: "same-origin",
+
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+
+                message.textContent =
+                    result.message + " Username: " + result.username;
+
+                message.className = "mt-3 alert alert-success";
+
+                cashierForm.reset();
+
+            } else {
+
+                message.textContent =
+                    result.message || "Could not create cashier account.";
+
+                message.className = "mt-3 alert alert-danger";
+            }
+
+        } catch (error) {
+
+            message.textContent =
+                "Could not connect to server.";
+
+            message.className = "mt-3 alert alert-danger";
+
+        } finally {
+
+            submitButton.disabled = false;
+            submitButton.textContent = "Create Cashier";
+        }
+    });
 }

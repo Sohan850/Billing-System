@@ -1,6 +1,6 @@
 import pymysql
 from config import get_db_connection
-from auth import login_required
+from auth import admin_required, billing_access_required
 from decimal import Decimal, InvalidOperation
 from flask import Blueprint, request, jsonify, session
 
@@ -10,7 +10,7 @@ products_bp = Blueprint('products', __name__)
 
 # Add Product API
 @products_bp.route('/add', methods=['POST'])
-@login_required
+@admin_required
 def add_product():
 
     data = request.get_json(silent=True) or {}
@@ -107,7 +107,7 @@ def add_product():
 
 # View All Products API
 @products_bp.route('/all', methods=['GET'])
-@login_required
+@billing_access_required
 def get_all_products():
 
     connection = None
@@ -145,7 +145,7 @@ def get_all_products():
 
 # Search Product API
 @products_bp.route('/search', methods=['GET'])
-@login_required
+@billing_access_required
 def search_product():
 
     keyword = request.args.get('keyword', '').strip()
@@ -193,7 +193,7 @@ def search_product():
 
 # Update Product API
 @products_bp.route('/update/<int:product_id>', methods=['PUT'])
-@login_required
+@admin_required
 def update_product(product_id):
 
     data = request.get_json(silent=True) or {}
@@ -303,7 +303,7 @@ def update_product(product_id):
 
 # Delete Product API
 @products_bp.route('/delete/<int:product_id>', methods=['DELETE'])
-@login_required
+@admin_required
 def delete_product(product_id):
 
     connection = None
@@ -377,7 +377,7 @@ def delete_product(product_id):
 
 # Restock Product API
 @products_bp.route('/restock/<int:product_id>', methods=['POST'])
-@login_required
+@admin_required
 def restock_product(product_id):
 
     data = request.get_json(silent=True) or {}

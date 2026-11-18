@@ -1,7 +1,7 @@
 
 from flask import Blueprint, jsonify, request
 from config import get_db_connection
-from auth import login_required
+from auth import admin_required
 from datetime import datetime, date, timedelta
 from decimal import Decimal
 
@@ -14,7 +14,7 @@ reports_bp = Blueprint('reports', __name__)
 # --------------------------------------------------
 
 @reports_bp.route('/daily', methods=['GET'])
-@login_required
+@admin_required
 def daily_sales_report():
 
     report_date = request.args.get('date')
@@ -101,7 +101,7 @@ def daily_sales_report():
 # --------------------------------------------------
 
 @reports_bp.route('/monthly', methods=['GET'])
-@login_required
+@admin_required
 def monthly_sales_report():
 
     month = request.args.get('month')
@@ -199,7 +199,7 @@ def monthly_sales_report():
 # --------------------------------------------------
 
 @reports_bp.route('/top-products', methods=['GET'])
-@login_required
+@admin_required
 def top_sold_products():
 
     try:

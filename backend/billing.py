@@ -1,7 +1,7 @@
 
 from flask import Blueprint, request, jsonify, session
 from config import get_db_connection
-from auth import login_required
+from auth import admin_required, billing_access_required
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 import secrets
 
@@ -35,7 +35,7 @@ def validate_positive_integer(value):
 # --------------------------------------------------
 
 @billing_bp.route('/create', methods=['POST'])
-@login_required
+@billing_access_required
 def create_bill():
 
     data = request.get_json(silent=True)
@@ -390,7 +390,7 @@ def create_bill():
 # --------------------------------------------------
 
 @billing_bp.route('/coupons/<int:customer_id>', methods=['GET'])
-@login_required
+@billing_access_required
 def get_customer_coupons(customer_id):
 
     connection = None
@@ -457,7 +457,7 @@ def get_customer_coupons(customer_id):
 # --------------------------------------------------
 
 @billing_bp.route('/all', methods=['GET'])
-@login_required
+@admin_required
 def get_all_sales():
 
     connection = None
@@ -514,7 +514,7 @@ def get_all_sales():
 # --------------------------------------------------
 
 @billing_bp.route('/<int:sale_id>', methods=['GET'])
-@login_required
+@admin_required
 def get_bill_details(sale_id):
 
     connection = None
