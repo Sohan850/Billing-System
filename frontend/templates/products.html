@@ -1,178 +1,310 @@
-
 {% extends "base.html" %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Product Management</h2>
-    <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
-</div>
+<style>
+/* Elegant Modern Retail - page-level styling only */
+.retail-page {
+    color: #263238;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-bottom: 1.5rem;
+}
+.retail-page h2, .retail-page h3, .retail-page h5, .retail-page h6 {
+    color: #202C3D;
+    letter-spacing: -0.02em;
+}
+.retail-page .page-heading {
+    margin-bottom: 1.6rem;
+}
+.retail-page .page-heading h2 {
+    font-size: clamp(1.45rem, 2vw, 1.85rem);
+    font-weight: 650;
+    margin-bottom: .35rem;
+}
+.retail-page .page-subtitle {
+    color: #71808d;
+    margin: 0;
+    font-size: .95rem;
+}
+.retail-page .retail-card {
+    background: #fff;
+    border: 1px solid #E2E8ED;
+    border-radius: 12px;
+    box-shadow: 0 3px 14px rgba(32, 44, 61, .045);
+    overflow: hidden;
+}
+.retail-page .retail-card > .card-header {
+    background: #fff;
+    color: #202C3D;
+    border-bottom: 1px solid #E9EEF2;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+}
+.retail-page .retail-card > .card-body {
+    padding: 1.25rem;
+}
+.retail-page .section-kicker {
+    color: #527AA3;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: .35rem;
+}
+.retail-page .form-label {
+    color: #344454;
+    font-size: .9rem;
+    font-weight: 600;
+    margin-bottom: .45rem;
+}
+.retail-page .form-control, .retail-page .form-select {
+    min-height: 42px;
+    border-color: #D8E0E7;
+    border-radius: 7px;
+    color: #263238;
+    background-color: #fff;
+}
+.retail-page .form-control:focus, .retail-page .form-select:focus {
+    border-color: #527AA3;
+    box-shadow: 0 0 0 .2rem rgba(82, 122, 163, .14);
+}
+.retail-page .btn {
+    border-radius: 7px;
+    font-weight: 600;
+    padding: .58rem .95rem;
+}
+.retail-page .btn-primary {
+    background: #527AA3;
+    border-color: #527AA3;
+}
+.retail-page .btn-primary:hover, .retail-page .btn-primary:focus {
+    background: #42698F;
+    border-color: #42698F;
+}
+.retail-page .btn-outline-primary {
+    color: #527AA3;
+    border-color: #A9BED1;
+}
+.retail-page .btn-outline-primary:hover {
+    color: #fff;
+    background: #527AA3;
+    border-color: #527AA3;
+}
+.retail-page .btn-secondary {
+    background: #E9EEF2;
+    border-color: #E9EEF2;
+    color: #344454;
+}
+.retail-page .btn-secondary:hover {
+    background: #DCE4EA;
+    border-color: #DCE4EA;
+    color: #202C3D;
+}
+.retail-page .btn-success {
+    background: #365F58;
+    border-color: #365F58;
+}
+.retail-page .btn-success:hover {
+    background: #2C504A;
+    border-color: #2C504A;
+}
+.retail-page .btn-danger {
+    background: #fff;
+    border: 1px solid #E3C9C9;
+    color: #9A4E4E;
+}
+.retail-page .btn-danger:hover {
+    background: #FAEEEE;
+    border-color: #D9B3B3;
+    color: #813E3E;
+}
+.retail-page .coupon-panel {
+    background: #F5F7F9;
+    border: 1px solid #E5EAEE;
+    border-radius: 9px;
+}
+.retail-page .coupon-panel .card-body {
+    padding: 1rem;
+}
+.retail-page .table {
+    color: #344454;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+.retail-page .table thead th {
+    background: #F3F6F8;
+    color: #425466;
+    font-size: .82rem;
+    font-weight: 700;
+    white-space: nowrap;
+    border-bottom: 1px solid #DDE5EB;
+    padding: .85rem .8rem;
+}
+.retail-page .table tbody td {
+    padding: .8rem;
+    border-color: #E9EEF2;
+}
+.retail-page .table-bordered {
+    border-color: #E1E7EC;
+}
+.retail-page .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #FAFBFC;
+}
+.retail-page .table tbody tr:hover > * {
+    background-color: #F5F8FA;
+}
+.retail-page .total-line {
+    color: #202C3D;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+.retail-page .helper-text {
+    color: #788692;
+    font-size: .84rem;
+}
+.retail-page .modal-content {
+    border: 1px solid #E1E7EC;
+    border-radius: 12px;
+    box-shadow: 0 16px 45px rgba(32, 44, 61, .16);
+}
+.retail-page .modal-header, .retail-page .modal-footer {
+    border-color: #E9EEF2;
+    padding: 1rem 1.25rem;
+}
+.retail-page .modal-title {
+    color: #202C3D;
+    font-weight: 650;
+}
+.retail-page .modal-body {
+    padding: 1.25rem;
+}
+.retail-page .table-message, .retail-page #tableMessage {
+    margin-top: .85rem;
+}
+@media (max-width: 575.98px) {
+    .retail-page .retail-card > .card-body { padding: 1rem; }
+    .retail-page .page-heading { align-items: flex-start !important; gap: 1rem; }
+}
+</style>
 
-<!-- Add Product Form -->
-<div class="card mb-4">
-    <div class="card-header">
-        Add New Product
-    </div>
-
-    <div class="card-body">
-
-        <form id="productForm">
-
-            <div class="row g-3">
-
-                <div class="col-md-6">
-                    <label class="form-label">Product Name</label>
-                    <input type="text" id="productName" class="form-control" required>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">SKU</label>
-                    <input type="text" id="sku" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Cost Price</label>
-                    <input type="number" id="costPrice" class="form-control" min="0" step="0.01" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Selling Price</label>
-                    <input type="number" id="sellingPrice" class="form-control" min="0" step="0.01" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Stock Quantity</label>
-                    <input type="number" id="stockQuantity" class="form-control" min="0" step="1" required>
-                </div>
-
-            </div>
-
-            <button type="submit" class="btn btn-success mt-3">
-                Add Product
-            </button>
-
-        </form>
-
-        <div id="productMessage" class="mt-3"></div>
-
-    </div>
-</div>
-
-
-<!-- Search Products -->
-<div class="card mb-4">
-
-    <div class="card-header">
-        Search Products
-    </div>
-
-    <div class="card-body">
-
-        <div class="input-group">
-            <input type="text" id="searchKeyword" class="form-control" placeholder="Enter product name or SKU">
-
-            <button class="btn btn-primary" onclick="searchProducts()">
-                Search
-            </button>
-
-            <button class="btn btn-secondary" onclick="loadProducts()">
-                Show All
-            </button>
+<div class="retail-page">
+    <div class="page-heading d-flex justify-content-between align-items-center">
+        <div>
+            <div class="section-kicker">Inventory</div>
+            <h2>Product Management</h2>
+            <p class="page-subtitle">Maintain product details, pricing and available stock.</p>
         </div>
-
-    </div>
-</div>
-
-
-<!-- Product List -->
-<div class="card">
-
-    <div class="card-header">
-        Product List
+        <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
     </div>
 
-    <div class="card-body">
-
-        <div class="table-responsive">
-
-            <table class="table table-bordered table-striped">
-
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Product Name</th>
-                        <th>SKU</th>
-                        <th>Cost Price</th>
-                        <th>Selling Price</th>
-                        <th>Stock</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody id="productTable">
-                </tbody>
-
-            </table>
-
-        </div>
-
-        <div id="tableMessage"></div>
-
-    </div>
-</div>
-
-
-<!-- Restock Product Modal -->
-<div class="modal fade" id="restockModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Restock Product</h5>
-                <button type="button" class="btn-close"
-                    data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-
-                <input type="hidden" id="restockProductId">
-
-                <p>
-                    Product: <strong id="restockProductName"></strong>
-                </p>
-
-                <p>
-                    Current Stock:
-                    <strong id="currentStock"></strong>
-                </p>
-
-                <div class="mb-3">
-                    <label class="form-label">Additional Quantity</label>
-                    <input type="number" id="restockQuantity"
-                        class="form-control" min="1" step="1" required>
+    <!-- Add Product Form -->
+    <section class="card retail-card mb-4">
+        <div class="card-header">Add New Product</div>
+        <div class="card-body">
+            <form id="productForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input type="text" id="productName" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="sku" class="form-label">SKU</label>
+                        <input type="text" id="sku" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="costPrice" class="form-label">Cost Price</label>
+                        <input type="number" id="costPrice" class="form-control" min="0" step="0.01" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="sellingPrice" class="form-label">Selling Price</label>
+                        <input type="number" id="sellingPrice" class="form-control" min="0" step="0.01" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                        <input type="number" id="stockQuantity" class="form-control" min="0" step="1" required>
+                    </div>
                 </div>
+                <button type="submit" class="btn btn-primary mt-3">Add Product</button>
+            </form>
+            <div id="productMessage" class="mt-3"></div>
+        </div>
+    </section>
 
-                <div class="mb-3">
-                    <label class="form-label">Purchase Cost Per Unit (₹)</label>
-                    <input type="number" id="restockCostPrice"
-                        class="form-control" min="0" step="0.01" required>
+    <!-- Search Products -->
+    <section class="card retail-card mb-4">
+        <div class="card-header">Search Products</div>
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md">
+                    <input type="text" id="searchKeyword" class="form-control"
+                           placeholder="Enter product name or SKU">
                 </div>
-
-                <div id="restockMessage"></div>
-
+                <div class="col-auto">
+                    <button class="btn btn-primary" onclick="searchProducts()">Search</button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-secondary" onclick="loadProducts()">Show All</button>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Cancel</button>
-
-                <button type="button" class="btn btn-success"
-                    id="confirmRestock">Confirm Restock</button>
+    <!-- Product List -->
+    <section class="card retail-card mb-4">
+        <div class="card-header">Product List</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Cost Price</th>
+                            <th>Selling Price</th>
+                            <th>Stock</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable"></tbody>
+                </table>
             </div>
+            <div id="tableMessage"></div>
+        </div>
+    </section>
 
+    <!-- Restock Product Modal -->
+    <div class="modal fade" id="restockModal" tabindex="-1" aria-labelledby="restockModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restockModalTitle">Restock Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="restockProductId">
+                    <p class="mb-2">Product: <strong id="restockProductName"></strong></p>
+                    <p class="mb-4">Current Stock: <strong id="currentStock"></strong></p>
+
+                    <div class="mb-3">
+                        <label for="restockQuantity" class="form-label">Additional Quantity</label>
+                        <input type="number" id="restockQuantity" class="form-control"
+                               min="1" step="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="restockCostPrice" class="form-label">Purchase Cost Per Unit (₹)</label>
+                        <input type="number" id="restockCostPrice" class="form-control"
+                               min="0" step="0.01" required>
+                    </div>
+                    <div id="restockMessage"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmRestock">Confirm Restock</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-
 {% endblock %}
