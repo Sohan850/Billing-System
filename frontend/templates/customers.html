@@ -3,120 +3,293 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Customer Management</h2>
-    <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
-</div>
+<style>
+    /* Customer Management - Elegant Modern Retail */
 
-<!-- Add Customer Form -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">Add New Customer</h5>
-    </div>
+    .customer-page {
+        color: #263238;
+        padding: 10px 4px 30px;
+    }
 
-    <div class="card-body">
-        <form id="customerForm">
+    .customer-page .page-heading {
+        font-size: 26px;
+        font-weight: 600;
+        color: #202C3D;
+        margin-bottom: 6px;
+    }
 
-            <div class="mb-3">
-                <label class="form-label">Customer Name</label>
-                <input type="text" id="customerName"
-                    class="form-control"
-                    placeholder="Enter customer name" required>
-            </div>
+    .customer-page .page-description {
+        color: #718096;
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
 
-            <div class="mb-3">
-                <label class="form-label">Phone Number</label>
-                <input type="text" id="customerPhone"
-                    class="form-control"
-                    placeholder="Enter phone number">
-            </div>
+    .customer-page .section-panel {
+        background: #FFFFFF;
+        border: 1px solid #E9EEF2;
+        border-radius: 10px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
 
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" id="customerEmail"
-                    class="form-control"
-                    placeholder="Enter email address">
-            </div>
+    .customer-page .section-title {
+        color: #202C3D;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
 
-            <button type="submit" class="btn btn-primary">
-                Add Customer
-            </button>
+    .customer-page .section-subtitle {
+        color: #84909D;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
 
-        </form>
+    .customer-page .form-label {
+        color: #465363;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 7px;
+    }
 
-        <div id="customerMessage" class="mt-3"></div>
-    </div>
-</div>
+    .customer-page .form-control {
+        border: 1px solid #DCE3E9;
+        border-radius: 6px;
+        padding: 10px 12px;
+        font-size: 14px;
+        box-shadow: none;
+    }
 
+    .customer-page .form-control:focus {
+        border-color: #527AA3;
+        box-shadow: 0 0 0 3px rgba(82, 122, 163, 0.10);
+    }
 
-<!-- Search Customers -->
-<div class="card mb-4">
-    <div class="card-body">
+    .customer-page .btn-primary {
+        background: #527AA3;
+        border-color: #527AA3;
+        border-radius: 6px;
+        padding: 9px 19px;
+        font-size: 14px;
+    }
 
-        <h5>Search Customers</h5>
+    .customer-page .btn-primary:hover {
+        background: #405F80;
+        border-color: #405F80;
+    }
 
-        <div class="input-group">
-            <input type="text" id="customerSearch"
-                class="form-control"
-                placeholder="Search by name or phone">
+    .customer-page .btn-secondary {
+        background: #E9EEF2;
+        color: #405064;
+        border: none;
+        border-radius: 6px;
+        padding: 9px 17px;
+        font-size: 14px;
+    }
 
-            <button class="btn btn-primary"
-                onclick="searchCustomers()">
-                Search
-            </button>
+    .customer-page .btn-secondary:hover {
+        background: #DCE4EA;
+        color: #202C3D;
+    }
 
-            <button class="btn btn-secondary"
-                onclick="loadCustomers()">
-                Show All
-            </button>
+    .customer-page .table {
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
+
+    .customer-page .table thead th {
+        background: #F5F7F9;
+        color: #526170;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        padding: 13px 14px;
+        border-bottom: 1px solid #E3E8ED;
+        white-space: nowrap;
+    }
+
+    .customer-page .table tbody td {
+        color: #465363;
+        font-size: 13px;
+        padding: 14px;
+        border-bottom: 1px solid #EDF0F3;
+    }
+
+    .customer-page .table tbody tr:hover {
+        background: #FAFBFC;
+    }
+
+    .customer-page .search-box {
+        max-width: 270px;
+    }
+
+    .customer-page .message {
+        font-size: 13px;
+        margin-top: 12px;
+    }
+
+    .customer-page .modal-content {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .customer-page .modal-header {
+        border-bottom: 1px solid #E9EEF2;
+    }
+
+    .customer-page .modal-title {
+        color: #202C3D;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .customer-page .modal-footer {
+        border-top: 1px solid #E9EEF2;
+    }
+
+    @media (max-width: 768px) {
+        .customer-page .section-panel {
+            padding: 17px;
+        }
+
+        .customer-page .page-heading {
+            font-size: 22px;
+        }
+
+        .customer-page .search-box {
+            max-width: 100%;
+        }
+    }
+</style>
+
+<div class="customer-page">
+
+    <!-- Page Heading -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-heading">Customer Management</h2>
+            <p class="page-description">
+                Manage customer information and maintain your customer records.
+            </p>
         </div>
 
-    </div>
-</div>
-
-
-<!-- Customer List -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">Customer List</h5>
+        <a href="/dashboard" class="btn btn-secondary">
+            Back to Dashboard
+        </a>
     </div>
 
-    <div class="card-body">
+    <!-- Add Customer Section -->
+    <div class="section-panel">
+        <h5 class="section-title">Add New Customer</h5>
+        <p class="section-subtitle">
+            Enter the customer's details to add a new record.
+        </p>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+        <form id="customerForm">
+            <div class="row g-3">
 
+                <div class="col-md-4">
+                    <label for="customerName" class="form-label">
+                        Customer Name
+                    </label>
+                    <input type="text"
+                           class="form-control"
+                           id="customerName"
+                           placeholder="Enter customer name"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="customerPhone" class="form-label">
+                        Phone Number
+                    </label>
+                    <input type="text"
+                           class="form-control"
+                           id="customerPhone"
+                           placeholder="Enter phone number"
+                           required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="customerEmail" class="form-label">
+                        Email Address
+                    </label>
+                    <input type="email"
+                           class="form-control"
+                           id="customerEmail"
+                           placeholder="Enter email address">
+                </div>
+
+                <div class="col-12 d-flex align-items-center gap-3 flex-wrap">
+                    <button type="submit" class="btn btn-primary">
+                        Add Customer
+                    </button>
+                    <span id="customerMessage" class="message"></span>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <!-- Customer Records Section -->
+    <div class="section-panel">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div>
+                <h5 class="section-title">Customer Records</h5>
+                <p class="section-subtitle mb-0">
+                    View and manage your registered customers.
+                </p>
+            </div>
+
+            <div class="search-box">
+                <input type="text"
+                       class="form-control"
+                       id="customerSearch"
+                       placeholder="Search customers..."
+                       onkeyup="searchCustomers()">
+            </div>
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table" id="customerTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Customer ID</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
-                <tbody id="customerTable">
+                <tbody>
+                    <!-- Customer records are loaded here -->
                 </tbody>
-
             </table>
         </div>
 
-        <div id="customerTableMessage"></div>
+        <div id="customerTableMessage" class="message"></div>
 
     </div>
+
 </div>
 
-
 <!-- Edit Customer Modal -->
-<div class="modal fade" id="editCustomerModal" tabindex="-1">
-    <div class="modal-dialog">
+<div class="modal fade" id="editCustomerModal" tabindex="-1"
+     aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Edit Customer Details</h5>
+                <h5 class="modal-title" id="editCustomerModalLabel">
+                    Edit Customer Details
+                </h5>
                 <button type="button" class="btn-close"
-                    data-bs-dismiss="modal"></button>
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -124,38 +297,55 @@
                 <input type="hidden" id="editCustomerId">
 
                 <div class="mb-3">
-                    <label class="form-label">Customer Name</label>
-                    <input type="text" id="editCustomerName"
-                        class="form-control">
+                    <label for="editCustomerName" class="form-label">
+                        Customer Name
+                    </label>
+                    <input type="text" class="form-control"
+                           id="editCustomerName">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Phone Number</label>
-                    <input type="text" id="editCustomerPhone"
-                        class="form-control">
+                    <label for="editCustomerPhone" class="form-label">
+                        Phone Number
+                    </label>
+                    <input type="text" class="form-control"
+                           id="editCustomerPhone">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" id="editCustomerEmail"
-                        class="form-control">
+                    <label for="editCustomerEmail" class="form-label">
+                        Email Address
+                    </label>
+                    <input type="email" class="form-control"
+                           id="editCustomerEmail">
                 </div>
 
-                <div id="editCustomerMessage"></div>
+                <div id="editCustomerMessage" class="message"></div>
 
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">Cancel</button>
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
 
                 <button type="button" class="btn btn-primary"
-                    onclick="updateCustomer()">Update Customer</button>
+                        onclick="updateCustomer()">
+                    Save Changes
+                </button>
             </div>
 
         </div>
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof loadCustomers === "function") {
+            loadCustomers();
+        }
+    });
+</script>
 
 {% endblock %}
