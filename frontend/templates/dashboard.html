@@ -3,9 +3,13 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<!-- Dashboard Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 
-    <h2>Billing & Inventory Dashboard</h2>
+    <div>
+        <h2>Dashboard</h2>
+        <p class="mb-0">Welcome back! Here's an overview of your business.</p>
+    </div>
 
     <button class="btn btn-danger" onclick="logout()">
         Logout
@@ -13,110 +17,157 @@
 
 </div>
 
-<div class="alert alert-info">
+
+<!-- Welcome Message -->
+<div class="alert alert-info mb-4">
     Welcome to the Billing and Inventory Management System!
 </div>
 
-<div class="row g-3">
+
+<!-- Dashboard Overview -->
+<div class="row g-4 mb-4">
 
     <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Products</h5>
-            <p>Manage your products and stock.</p>
-            <a href="/products" class="btn btn-primary">Manage Products</a>
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Products</h5>
+                <p>Manage your products, prices and available stock.</p>
+                <a href="/products" class="btn btn-primary">
+                    Manage Products
+                </a>
+            </div>
         </div>
     </div>
 
+
     <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Billing</h5>
-            <p>Create customer bills.</p>
-            <a href="/billing" class="btn btn-primary">Create Bill</a>
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Billing</h5>
+                <p>Create customer bills and process transactions.</p>
+                <a href="/billing" class="btn btn-primary">
+                    Create Bill
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Customers</h5>
-            <p>Manage customer details.</p>
-            <a href="/customers" class="btn btn-primary w-100">
-    Manage Customers
-</a>        </div>
-    </div>
 
     <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Purchases</h5>
-            <p>View purchases and restock products.</p>
-           <a href="/purchases" class="btn btn-primary">Purchases</a>
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Customers</h5>
+                <p>View and manage customer information.</p>
+                <a href="/customers" class="btn btn-primary">
+                    Manage Customers
+                </a>
+            </div>
         </div>
     </div>
 
+
     <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Memberships</h5>
-            <p>Manage customer memberships.</p>
-            <a href="/memberships" class="btn btn-primary">
-    Memberships
-</a>
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Purchases & Restocking</h5>
+                <p>Record purchases and restock inventory.</p>
+                <a href="/purchases" class="btn btn-primary">
+                    Manage Purchases
+                </a>
+            </div>
         </div>
     </div>
 
+
     <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Reports</h5>
-            <p>View daily and monthly sales reports.</p>
-            <a href="/reports" class="btn btn-primary">Reports</a>
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Memberships</h5>
+                <p>Manage customer membership details.</p>
+                <a href="/memberships" class="btn btn-primary">
+                    View Memberships
+                </a>
+            </div>
         </div>
     </div>
+
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Sales Reports</h5>
+                <p>View daily and monthly sales reports.</p>
+                <a href="/reports" class="btn btn-primary">
+                    View Reports
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
 <!-- Create Cashier Account -->
-<div class="col-md-4">
-    <div class="card p-3">
-        <h5>Create Cashier Account</h5>
+<div class="card mt-4">
+
+    <div class="card-header">
+        Create Cashier Account
+    </div>
+
+    <div class="card-body">
 
         <p>
-            Create a login account for an employee
-            who can access billing only.
+            Create a login account for an employee who can access
+            the billing system as a cashier.
         </p>
 
         <form id="cashierForm">
 
-            <div class="mb-3">
-                <label class="form-label">Cashier Username</label>
+            <div class="row g-3">
 
-                <input
-                    type="text"
-                    id="cashierUsername"
-                    class="form-control"
-                    minlength="3"
-                    maxlength="50"
-                    placeholder="Enter username"
-                    required
-                >
+                <div class="col-md-5">
+                    <label class="form-label">Cashier Username</label>
+
+                    <input
+                        type="text"
+                        id="cashierUsername"
+                        class="form-control"
+                        minlength="3"
+                        maxlength="50"
+                        placeholder="Enter username"
+                        required
+                    >
+                </div>
+
+
+                <div class="col-md-5">
+                    <label class="form-label">Temporary Password</label>
+
+                    <input
+                        type="password"
+                        id="cashierPassword"
+                        class="form-control"
+                        minlength="8"
+                        placeholder="Minimum 8 characters"
+                        required
+                    >
+                </div>
+
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Create Cashier
+                    </button>
+                </div>
+
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">Temporary Password</label>
-
-                <input
-                    type="password"
-                    id="cashierPassword"
-                    class="form-control"
-                    minlength="8"
-                    placeholder="Minimum 8 characters"
-                    required
-                >
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                Create Cashier
-            </button>
 
         </form>
 
         <div id="cashierMessage" class="mt-3"></div>
+
     </div>
-</div>
+
 </div>
 
 {% endblock %}
