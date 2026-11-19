@@ -4,144 +4,448 @@
 {% block content %}
 
 <style>
+
+/* ==============================================
+   MEMBERSHIP PAGE - PREMIUM DASHBOARD THEME
+============================================== */
+
 .membership-page {
-    color: #263238;
+    --membership-bg: #101126;
+    --membership-card: #1a1c3a;
+    --membership-header: #202342;
+    --membership-input: #12152e;
+    --membership-border: #2d3154;
+    --membership-white: #f4f5ff;
+    --membership-muted: #a8b0d2;
+    --membership-purple: #a99aff;
+
+    width: 100%;
+    max-width: 1440px;
+    min-width: 0;
+    margin: 0 auto;
     padding: 12px 4px 30px;
+    color: var(--membership-white);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    box-sizing: border-box;
 }
 
+.membership-page *,
+.membership-page *::before,
+.membership-page *::after {
+    box-sizing: border-box;
+}
+
+/* ==============================================
+   PAGE BACKGROUND - NO WHITE
+============================================== */
+
+body:has(.membership-page),
+body:has(.membership-page) main,
+body:has(.membership-page) .app-shell,
+body:has(.membership-page) .main-content,
+body:has(.membership-page) .content-area,
+body:has(.membership-page) .content-wrapper,
+body:has(.membership-page) .app-content,
+body:has(.membership-page) .container-fluid {
+    background: #101126 !important;
+    color: #f4f5ff !important;
+}
+
+/* ==============================================
+   PAGE HEADING
+============================================== */
+
 .membership-page .page-heading {
-    color: #202C3D;
-    font-weight: 650;
-    letter-spacing: -0.4px;
+    color: #f5f4ff !important;
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
+    font-weight: 750;
+    letter-spacing: -.8px;
 }
 
 .membership-page .page-subtitle {
-    color: #718096;
-    font-size: 14px;
+    color: #a8b0d2 !important;
+    font-size: .9rem;
+    line-height: 1.6;
 }
+
+/* ==============================================
+   MEMBERSHIP CARDS
+============================================== */
 
 .membership-page .section-panel {
-    background: #FFFFFF;
-    border: 1px solid #E9EEF2;
-    border-radius: 10px;
+    width: 100%;
+    min-width: 0;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    border: 1px solid #2c2e50 !important;
+    border-radius: 16px !important;
     margin-bottom: 24px;
     overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .17);
 }
 
+/* Card header */
 .membership-page .section-heading {
-    padding: 18px 22px;
-    border-bottom: 1px solid #E9EEF2;
+    background: #202342 !important;
+    color: #f4f5ff !important;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #303454 !important;
 }
 
+/* Card title */
 .membership-page .section-heading h5 {
-    color: #202C3D;
-    font-size: 16px;
-    font-weight: 600;
+    color: #f0edff !important;
+    font-size: 1.05rem;
+    font-weight: 750;
     margin: 0;
 }
 
+/* Card body */
 .membership-page .section-body {
-    padding: 22px;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    padding: 1.5rem;
 }
 
+/* ==============================================
+   FORM LABELS
+============================================== */
+
 .membership-page .form-label {
-    color: #374151;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 7px;
+    display: block;
+    color: #c7c9e9 !important;
+    font-size: .9rem;
+    font-weight: 650;
+    margin-bottom: .55rem;
 }
+
+/* ==============================================
+   INPUTS, DATE FIELDS AND DROPDOWNS
+============================================== */
 
 .membership-page .form-control,
 .membership-page .form-select {
-    border: 1px solid #DCE3E9;
-    border-radius: 6px;
-    min-height: 42px;
-    font-size: 14px;
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    background: #12152e !important;
+    color: #f5f5ff !important;
+    border: 1px solid #343858 !important;
+    border-radius: 10px !important;
+    padding: .7rem .9rem;
+    font-family: inherit;
+    font-size: .92rem;
+    box-shadow: none;
+    transition: border-color .2s, box-shadow .2s;
 }
 
+/* Placeholder */
+.membership-page .form-control::placeholder {
+    color: #858eaf !important;
+    opacity: 1;
+}
+
+/* Date picker colour scheme */
+.membership-page input[type="date"] {
+    color-scheme: dark;
+}
+
+/* Focus */
 .membership-page .form-control:focus,
 .membership-page .form-select:focus {
-    border-color: #527AA3;
-    box-shadow: 0 0 0 3px rgba(82, 122, 163, 0.12);
+    background: #151832 !important;
+    color: #ffffff !important;
+    border-color: #8974f5 !important;
+    box-shadow: 0 0 0 3px rgba(137, 116, 245, .18) !important;
+    outline: none;
 }
 
+/* Dropdown options */
+.membership-page .form-select option {
+    background: #1a1c3a;
+    color: #f5f5ff;
+}
+
+/* ==============================================
+   BUTTONS
+============================================== */
+
+.membership-page .btn {
+    min-height: 44px;
+    border-radius: 10px !important;
+    padding: .7rem 1.15rem;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700 !important;
+    transition: all .2s ease;
+}
+
+/* Register Membership / Update Membership */
 .membership-page .btn-primary {
-    background: #527AA3;
-    border-color: #527AA3;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 9px 18px;
+    background: linear-gradient(135deg, #665ee8, #a35cdd) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 5px 16px rgba(126, 94, 232, .2);
 }
 
-.membership-page .btn-primary:hover {
-    background: #405F80;
-    border-color: #405F80;
+.membership-page .btn-primary:hover,
+.membership-page .btn-primary:focus {
+    background: linear-gradient(135deg, #796ff5, #b46de9) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(126, 94, 232, .3);
 }
 
+/* Back to Dashboard / Back to Cashier / Cancel */
 .membership-page .btn-outline-secondary {
-    border-color: #DCE3E9;
-    color: #475569;
-    border-radius: 6px;
-    font-size: 14px;
+    background: #272a49 !important;
+    color: #ded8ff !important;
+    border: 1px solid #625b9b !important;
+}
+
+.membership-page .btn-outline-secondary:hover {
+    background: #35395e !important;
+    color: #ffffff !important;
+    border-color: #9282ef !important;
+    transform: translateY(-1px);
+}
+
+/* Secondary buttons */
+.membership-page .btn-secondary {
+    background: #272a49 !important;
+    color: #e4e5ff !important;
+    border: 1px solid #41466d !important;
+}
+
+.membership-page .btn-secondary:hover {
+    background: #35395e !important;
+    color: #ffffff !important;
+}
+
+/* Delete action, if present */
+.membership-page .btn-danger {
+    background: #d95372 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+/* ==============================================
+   MEMBERSHIP RECORDS TABLE
+============================================== */
+
+.membership-page .table-responsive {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
 }
 
 .membership-page .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #e9ebff;
+    --bs-table-border-color: #343858;
+    --bs-table-hover-bg: #292d50;
+    --bs-table-hover-color: #ffffff;
+
+    width: 100%;
     margin-bottom: 0;
-    font-size: 13px;
-}
-
-.membership-page .table thead th {
-    background: #F5F7F9;
-    color: #526171;
-    font-weight: 600;
-    font-size: 12px;
-    padding: 13px 14px;
-    border-bottom: 1px solid #E3E9EE;
-    white-space: nowrap;
-}
-
-.membership-page .table tbody td {
-    padding: 14px;
+    font-size: .85rem;
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
     vertical-align: middle;
-    color: #374151;
-    border-color: #EDF0F3;
 }
 
-.membership-page .table-hover tbody tr:hover {
-    background: #F8FAFC;
+/* Table heading */
+.membership-page .table thead th {
+    background: #252849 !important;
+    color: #c6baff !important;
+    font-size: .78rem;
+    font-weight: 750;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 1rem .9rem;
+    white-space: nowrap;
+    border-bottom: 1px solid #3b4066 !important;
+    border-color: #3b4066 !important;
 }
+
+/* Table records */
+.membership-page .table tbody td {
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    padding: .95rem .9rem;
+    vertical-align: middle;
+    border-color: #343858 !important;
+}
+
+/* Alternating rows */
+.membership-page .table tbody tr:nth-of-type(odd) td {
+    background: #202342 !important;
+}
+
+/* Hover */
+.membership-page .table-hover tbody tr:hover td {
+    background: #292d50 !important;
+    color: #ffffff !important;
+}
+
+/* ==============================================
+   MEMBERSHIP STATUS BADGES
+============================================== */
+
+.membership-page .badge.bg-success {
+    background: #176b59 !important;
+    color: #b8f5df !important;
+}
+
+.membership-page .badge.bg-danger {
+    background: #77334a !important;
+    color: #ffc1cd !important;
+}
+
+.membership-page .badge.bg-warning {
+    background: #75531e !important;
+    color: #ffe5a8 !important;
+}
+
+.membership-page .badge.bg-secondary {
+    background: #383d60 !important;
+    color: #e2e4ff !important;
+}
+
+/* ==============================================
+   MESSAGES
+============================================== */
+
+.membership-page #membershipMessage,
+.membership-page #membershipTableMessage,
+.membership-page #editMembershipMessage {
+    color: #b8c0df !important;
+    font-size: .86rem;
+    line-height: 1.6;
+}
+
+/* Alerts */
+.membership-page .alert-success {
+    background: #173c37 !important;
+    color: #a8f0d3 !important;
+    border: 1px solid #276c5d !important;
+}
+
+.membership-page .alert-danger {
+    background: #472531 !important;
+    color: #ffc1cd !important;
+    border: 1px solid #874254 !important;
+}
+
+.membership-page .alert-warning {
+    background: #49391d !important;
+    color: #ffe0a0 !important;
+    border: 1px solid #80632b !important;
+}
+
+/* ==============================================
+   EDIT MEMBERSHIP MODAL
+============================================== */
 
 .membership-page .modal-content {
-    border: none;
-    border-radius: 10px;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    border: 1px solid #343858 !important;
+    border-radius: 14px !important;
     overflow: hidden;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, .3);
 }
 
-.membership-page .modal-header {
-    background: #F8FAFC;
-    border-bottom: 1px solid #E9EEF2;
+.membership-page .modal-header,
+.membership-page .modal-footer {
+    background: #202342 !important;
+    color: #ffffff !important;
+    border-color: #343858 !important;
+    padding: 1rem 1.25rem;
 }
 
 .membership-page .modal-title {
-    color: #202C3D;
-    font-size: 17px;
-    font-weight: 600;
+    color: #c4b5fd !important;
+    font-size: 1.05rem;
+    font-weight: 750;
 }
 
-.membership-page .modal-footer {
-    border-top: 1px solid #E9EEF2;
+.membership-page .modal-body {
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    padding: 1.25rem;
+}
+
+.membership-page .modal-body .form-label {
+    color: #c7c9e9 !important;
+}
+
+.membership-page .modal-body .form-control,
+.membership-page .modal-body .form-select {
+    background: #12152e !important;
+    color: #f5f5ff !important;
+    border-color: #343858 !important;
+}
+
+.membership-page .modal-body .form-control:focus,
+.membership-page .modal-body .form-select:focus {
+    border-color: #8974f5 !important;
+    box-shadow: 0 0 0 3px rgba(137, 116, 245, .18) !important;
+}
+
+/* Close icon */
+.membership-page .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: .85;
+}
+
+.membership-page .btn-close:hover {
+    opacity: 1;
+}
+
+/* No light Bootstrap backgrounds */
+.membership-page .bg-white,
+.membership-page .bg-light,
+.membership-page .table-light,
+.membership-page .btn-light {
+    background: #202342 !important;
+    color: #f4f5ff !important;
+}
+
+/* ==============================================
+   RESPONSIVE DESIGN
+============================================== */
+
+@media (max-width: 767.98px) {
+    .membership-page .section-heading {
+        padding: 1rem;
+    }
+
+    .membership-page .section-body {
+        padding: 1rem;
+    }
+
+    .membership-page .table {
+        font-size: .8rem;
+    }
 }
 
 @media (max-width: 576px) {
-    .membership-page .section-body {
-        padding: 16px;
+    .membership-page {
+        padding: 8px 0 24px;
     }
 
     .membership-page .page-heading {
-        font-size: 22px;
+        font-size: 1.4rem;
+    }
+
+    .membership-page .section-body {
+        padding: .85rem;
     }
 }
+
 </style>
 
 <div class="membership-page">

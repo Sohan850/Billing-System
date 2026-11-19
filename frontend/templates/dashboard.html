@@ -3,153 +3,234 @@
 
 {% block content %}
 
-<!-- Dashboard Header -->
-<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+<div class="premium-dashboard">
 
-    <div>
-        <h2>Dashboard</h2>
-        <p class="mb-0">Welcome back! Here's an overview of your business.</p>
-    </div>
+    <!-- TOP HEADER -->
+    <header class="pd-header">
+        <div>
+            <div class="pd-eyebrow">MANAGEMENT OVERVIEW</div>
+            <h1>Dashboard</h1>
+            <p>Welcome back, {{ session.get('username', 'Admin') }}. Here's your business overview.</p>
+        </div>
 
-    <button class="btn btn-danger" onclick="logout()">
-        Logout
-    </button>
+        <div class="pd-header-right">
+            <div class="pd-date">
+                <span>◷</span>
+                <span id="pdToday">Today</span>
+            </div>
+
+            <div class="pd-user">
+                <div class="pd-avatar">A</div>
+                <div>
+                    <strong>{{ session.get('username', 'Admin') }}</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- DASHBOARD STATUS -->
+    <div id="pdStatus" class="pd-status" style="display:none;"></div>
+
+
+    <!-- KPI CARDS -->
+    <section class="pd-stats">
+
+        <article class="pd-stat stat-purple">
+            <div class="pd-stat-top">
+                <div class="pd-stat-icon">₹</div>
+                <span class="pd-stat-tag">ALL TIME</span>
+            </div>
+            <div class="pd-stat-value" id="pdRevenue">Loading...</div>
+            <div class="pd-stat-label">Total Revenue</div>
+            <div class="pd-stat-foot">Total recorded sales</div>
+        </article>
+
+        <article class="pd-stat stat-pink">
+            <div class="pd-stat-top">
+                <div class="pd-stat-icon">▤</div>
+                <span class="pd-stat-tag">TRANSACTIONS</span>
+            </div>
+            <div class="pd-stat-value" id="pdBills">--</div>
+            <div class="pd-stat-label">Bills Generated</div>
+            <div class="pd-stat-foot">Recorded sales bills</div>
+        </article>
+
+        <article class="pd-stat stat-cyan">
+            <div class="pd-stat-top">
+                <div class="pd-stat-icon">▣</div>
+                <span class="pd-stat-tag">INVENTORY</span>
+            </div>
+            <div class="pd-stat-value" id="pdProducts">--</div>
+            <div class="pd-stat-label">Products</div>
+            <div class="pd-stat-foot">Products in catalog</div>
+        </article>
+
+        <article class="pd-stat stat-orange">
+            <div class="pd-stat-top">
+                <div class="pd-stat-icon">♙</div>
+                <span class="pd-stat-tag">CUSTOMERS</span>
+            </div>
+            <div class="pd-stat-value" id="pdCustomers">--</div>
+            <div class="pd-stat-label">Registered Customers</div>
+            <div class="pd-stat-foot">Customer database</div>
+        </article>
+
+    </section>
+
+
+    <!-- REVENUE AND RECENT ACTIVITY -->
+    <section class="pd-main-grid">
+
+        <!-- REVENUE CHART -->
+        <div class="pd-panel pd-revenue-panel">
+
+            <div class="pd-panel-header">
+                <div>
+                    <h3>Revenue Overview</h3>
+                    <p>Sales revenue over the last 7 days</p>
+                </div>
+
+                <span class="pd-panel-badge">LAST 7 DAYS</span>
+            </div>
+
+            <div class="pd-chart-area">
+                <canvas id="pdRevenueChart"></canvas>
+            </div>
+
+            <div class="pd-chart-footer">
+                <div>
+                    <span class="pd-legend-dot"></span>
+                    <span>Daily sales revenue</span>
+                </div>
+
+                <strong id="pdSevenDayRevenue">₹0.00</strong>
+            </div>
+
+        </div>
+
+
+        <!-- RECENT ACTIVITY -->
+        <div class="pd-panel pd-activity-panel">
+
+            <div class="pd-panel-header">
+                <div>
+                    <h3>Recent Activity</h3>
+                    <p>Latest recorded transactions</p>
+                </div>
+
+                <a href="/billing" class="pd-view-link">View Billing →</a>
+            </div>
+
+            <div id="pdRecentActivity" class="pd-activity-list">
+                <div class="pd-empty">Loading recent transactions...</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCTS AND QUICK ACTIONS -->
+    <section class="pd-bottom-grid">
+
+        <!-- TOP PRODUCTS -->
+        <div class="pd-panel pd-products-panel">
+
+            <div class="pd-panel-header">
+                <div>
+                    <h3>Top Selling Products</h3>
+                    <p>Products ranked by quantity sold</p>
+                </div>
+
+                <span class="pd-panel-badge">TOP 5</span>
+            </div>
+
+            <div id="pdTopProducts" class="pd-top-products">
+                <div class="pd-empty">Loading product information...</div>
+            </div>
+
+            <a href="/reports" class="pd-bottom-link">
+                View complete sales reports →
+            </a>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+        <div class="pd-panel pd-actions-panel">
+
+            <div class="pd-panel-header">
+                <div>
+                    <h3>Quick Actions</h3>
+                    <p>Access frequently used features</p>
+                </div>
+            </div>
+<div class="pd-action-grid">
+
+    <a href="/billing" class="pd-action action-purple">
+        <span class="pd-action-icon">▤</span>
+        <strong>Create Bill</strong>
+        <small>Process a transaction</small>
+    </a>
+
+    <a href="/customers" class="pd-action action-pink">
+        <span class="pd-action-icon">♙</span>
+        <strong>Add Customer</strong>
+        <small>Manage customers</small>
+    </a>
+
+    <a href="/products" class="pd-action action-cyan">
+        <span class="pd-action-icon">▣</span>
+        <strong>Manage Products</strong>
+        <small>Update inventory</small>
+    </a>
+
+    <a href="/memberships" class="pd-action action-green">
+        <span class="pd-action-icon">♧</span>
+        <strong>Memberships</strong>
+        <small>Manage customer plans</small>
+    </a>
+
+    <a href="/reports" class="pd-action action-orange">
+        <span class="pd-action-icon">▥</span>
+        <strong>Sales Reports</strong>
+        <small>Analyse performance</small>
+    </a>
+
+    <a href="/sales-book" class="pd-action action-indigo">
+        <span class="pd-action-icon">▧</span>
+        <strong>Sales Book</strong>
+        <small>Explore previous bills</small>
+    </a>
 
 </div>
 
 
-<!-- Welcome Message -->
-<div class="alert alert-info mb-4">
-    Welcome to the Billing and Inventory Management System!
-</div>
+    </section>
 
 
-<!-- Dashboard Overview -->
-<div class="row g-4 mb-4">
+    <!-- CASHIER ACCOUNT SECTION -->
+    <section class="pd-panel pd-cashier-panel">
 
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Products</h5>
-                <p>Manage your products, prices and available stock.</p>
-                <a href="/products" class="btn btn-primary">
-                    Manage Products
-                </a>
+        <div class="pd-panel-header">
+            <div>
+                <h3>Cashier Management</h3>
+                <p>Create a separate login account for your employees.</p>
             </div>
+            <span class="pd-panel-badge">ADMIN ONLY</span>
         </div>
-    </div>
-
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Billing</h5>
-                <p>Create customer bills and process transactions.</p>
-                <a href="/billing" class="btn btn-primary">
-                    Create Bill
-                </a>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Customers</h5>
-                <p>View and manage customer information.</p>
-                <a href="/customers" class="btn btn-primary">
-                    Manage Customers
-                </a>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Purchases & Restocking</h5>
-                <p>Record purchases and restock inventory.</p>
-                <a href="/purchases" class="btn btn-primary">
-                    Manage Purchases
-                </a>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Memberships</h5>
-                <p>Manage customer membership details.</p>
-                <a href="/memberships" class="btn btn-primary">
-                    View Memberships
-                </a>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Sales Reports</h5>
-                <p>View daily and monthly sales reports.</p>
-                <a href="/reports" class="btn btn-primary">
-                    View Reports
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sales Book -->
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Sales Book</h5>
-
-                <p>
-                    View bills between selected dates
-                    and check purchased products.
-                </p>
-
-                <a href="/sales-book" class="btn btn-primary w-100">
-                    Open Sales Book
-                </a>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
-<!-- Create Cashier Account -->
-<div class="card mt-4">
-
-    <div class="card-header">
-        Create Cashier Account
-    </div>
-
-    <div class="card-body">
-
-        <p>
-            Create a login account for an employee who can access
-            the billing system as a cashier.
-        </p>
 
         <form id="cashierForm">
 
-            <div class="row g-3">
+            <div class="pd-cashier-form">
 
-                <div class="col-md-5">
-                    <label class="form-label">Cashier Username</label>
-
+                <div>
+                    <label for="cashierUsername">Cashier Username</label>
                     <input
                         type="text"
                         id="cashierUsername"
-                        class="form-control"
                         minlength="3"
                         maxlength="50"
                         placeholder="Enter username"
@@ -157,35 +238,433 @@
                     >
                 </div>
 
-
-                <div class="col-md-5">
-                    <label class="form-label">Temporary Password</label>
-
+                <div>
+                    <label for="cashierPassword">Temporary Password</label>
                     <input
                         type="password"
                         id="cashierPassword"
-                        class="form-control"
                         minlength="8"
                         placeholder="Minimum 8 characters"
                         required
                     >
                 </div>
 
-
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">
-                        Create Cashier
-                    </button>
-                </div>
+                <button type="submit">
+                    + Create Cashier
+                </button>
 
             </div>
 
         </form>
 
-        <div id="cashierMessage" class="mt-3"></div>
+        <div id="cashierMessage" class="pd-cashier-message"></div>
 
-    </div>
+    </section>
 
 </div>
+
+
+<!-- CHART LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- DASHBOARD DATA -->
+<script>
+
+(function () {
+
+    const money = value =>
+        "₹" + Number(value || 0).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    const escapeHTML = value =>
+        String(value ?? "").replace(/[&<>"']/g, char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[char]);
+
+    function getDate(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function getDateKey(date) {
+        return [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, "0"),
+            String(date.getDate()).padStart(2, "0")
+        ].join("-");
+    }
+
+    function formatTime(value) {
+        const date = getDate(value);
+
+        if (!date) return "Date unavailable";
+
+        return date.toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+
+    async function fetchData(url) {
+        const response = await fetch(url, {
+            credentials: "same-origin"
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Could not load data");
+        }
+
+        return result;
+    }
+
+
+    // CURRENT DATE
+    const today = new Date();
+
+    document.getElementById("pdToday").textContent =
+        today.toLocaleDateString("en-IN", {
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+
+
+    // LOAD REVENUE, BILLS AND RECENT ACTIVITY
+    async function loadSalesDashboard() {
+
+        const result = await fetchData("/api/billing/all");
+
+        const sales = result.sales || [];
+
+        const totalRevenue = sales.reduce(
+            (sum, sale) => sum + Number(sale.total_amount || 0),
+            0
+        );
+
+        document.getElementById("pdRevenue").textContent =
+            money(totalRevenue);
+
+        document.getElementById("pdBills").textContent =
+            sales.length.toLocaleString("en-IN");
+
+
+        // LAST SEVEN DAYS
+        const dayLabels = [];
+        const dayKeys = [];
+        const dayValues = {};
+
+        for (let i = 6; i >= 0; i--) {
+
+            const date = new Date(today);
+            date.setDate(today.getDate() - i);
+
+            const key = getDateKey(date);
+
+            dayKeys.push(key);
+            dayLabels.push(date.toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short"
+            }));
+
+            dayValues[key] = 0;
+        }
+
+        sales.forEach(sale => {
+
+            const date = getDate(sale.sale_date);
+
+            if (!date) return;
+
+            const key = getDateKey(date);
+
+            if (Object.prototype.hasOwnProperty.call(dayValues, key)) {
+                dayValues[key] += Number(sale.total_amount || 0);
+            }
+
+        });
+
+        const chartValues = dayKeys.map(key => dayValues[key]);
+
+        const sevenDayRevenue = chartValues.reduce(
+            (sum, value) => sum + value,
+            0
+        );
+
+        document.getElementById("pdSevenDayRevenue").textContent =
+            money(sevenDayRevenue);
+
+
+        // DRAW CHART
+        const canvas = document.getElementById("pdRevenueChart");
+
+        if (window.Chart && canvas) {
+
+            if (window.pdRevenueChartInstance) {
+                window.pdRevenueChartInstance.destroy();
+            }
+
+            const context = canvas.getContext("2d");
+
+            const gradient = context.createLinearGradient(0, 0, 0, 250);
+            gradient.addColorStop(0, "rgba(151, 112, 255, 0.95)");
+            gradient.addColorStop(1, "rgba(87, 93, 218, 0.85)");
+
+            window.pdRevenueChartInstance = new Chart(context, {
+
+                type: "bar",
+
+                data: {
+                    labels: dayLabels,
+
+                    datasets: [{
+                        label: "Revenue",
+                        data: chartValues,
+                        backgroundColor: gradient,
+                        borderRadius: 7,
+                        borderSkipped: false,
+                        maxBarThickness: 35
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+                            backgroundColor: "#13152c",
+                            titleColor: "#ffffff",
+                            bodyColor: "#d9d9ee",
+                            padding: 12,
+                            callbacks: {
+                                label: context => money(context.raw)
+                            }
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: "#9294b4",
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "rgba(255,255,255,0.06)"
+                            },
+                            ticks: {
+                                color: "#9294b4",
+                                font: {
+                                    size: 10
+                                },
+                                callback: value =>
+                                    "₹" + Number(value).toLocaleString("en-IN")
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+
+            });
+
+        }
+
+
+        // RECENT ACTIVITY
+        const recent = sales.slice(0, 5);
+        const activityContainer =
+            document.getElementById("pdRecentActivity");
+
+        if (!recent.length) {
+
+            activityContainer.innerHTML =
+                '<div class="pd-empty">No transactions recorded yet.</div>';
+
+            return;
+        }
+
+        activityContainer.innerHTML = recent.map((sale, index) => {
+
+            const customer = sale.customer_name || "Walk-in Customer";
+
+            const initial = escapeHTML(customer.charAt(0).toUpperCase());
+
+            return `
+                <div class="pd-activity-item">
+
+                    <div class="pd-activity-avatar activity-avatar-${index % 4}">
+                        ${initial}
+                    </div>
+
+                    <div class="pd-activity-info">
+                        <strong>Bill #${escapeHTML(sale.sale_id)}</strong>
+                        <span>${escapeHTML(customer)}</span>
+                        <small>${escapeHTML(formatTime(sale.sale_date))}</small>
+                    </div>
+
+                    <div class="pd-activity-amount">
+                        ${money(sale.total_amount)}
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    }
+
+
+    // LOAD PRODUCTS
+    async function loadProductDashboard() {
+
+        const result = await fetchData("/api/products/all");
+
+        const products = result.products || [];
+
+        document.getElementById("pdProducts").textContent =
+            products.length.toLocaleString("en-IN");
+
+    }
+
+
+    // LOAD CUSTOMERS
+    async function loadCustomerDashboard() {
+
+        const result = await fetchData("/api/customers/all");
+
+        const customers = result.customers || [];
+
+        document.getElementById("pdCustomers").textContent =
+            customers.length.toLocaleString("en-IN");
+
+    }
+
+
+    // LOAD TOP PRODUCTS
+    async function loadTopProductsDashboard() {
+
+        const result = await fetchData("/api/reports/top-products?limit=5");
+
+        const products = result.products || [];
+
+        const container = document.getElementById("pdTopProducts");
+
+        if (!products.length) {
+            container.innerHTML =
+                '<div class="pd-empty">No product sales available yet.</div>';
+            return;
+        }
+
+        const highestQuantity = Math.max(
+            ...products.map(product =>
+                Number(product.total_quantity_sold || 0)
+            ),
+            1
+        );
+
+        container.innerHTML = products.map((product, index) => {
+
+            const quantity = Number(product.total_quantity_sold || 0);
+
+            const progress = Math.min(
+                (quantity / highestQuantity) * 100,
+                100
+            );
+
+            return `
+                <div class="pd-product-row">
+
+                    <div class="pd-product-heading">
+                        <div>
+                            <strong>${escapeHTML(product.product_name)}</strong>
+                            <small>SKU: ${escapeHTML(product.sku)}</small>
+                        </div>
+
+                        <span>${quantity} sold</span>
+                    </div>
+
+                    <div class="pd-progress">
+                        <div
+                            class="pd-progress-bar progress-${index}"
+                            style="width: ${progress}%;">
+                        </div>
+                    </div>
+
+                    <div class="pd-product-footer">
+                        <span>Revenue</span>
+                        <strong>${money(product.total_revenue)}</strong>
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    }
+
+
+    // INITIALIZE ALL DASHBOARD DATA
+    async function initializeDashboard() {
+
+        const tasks = [
+            loadSalesDashboard(),
+            loadProductDashboard(),
+            loadCustomerDashboard(),
+            loadTopProductsDashboard()
+        ];
+
+        const results = await Promise.allSettled(tasks);
+
+        const failures = results.filter(
+            result => result.status === "rejected"
+        );
+
+        if (failures.length) {
+
+            const status = document.getElementById("pdStatus");
+
+            status.style.display = "block";
+
+            status.textContent =
+                "Some dashboard information could not be loaded. Check your connection and refresh the page.";
+
+        }
+
+    }
+
+    initializeDashboard();
+
+})();
+
+</script>
 
 {% endblock %}

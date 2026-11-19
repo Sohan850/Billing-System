@@ -4,266 +4,497 @@
 
 
 <style>
-/* Elegant Modern Retail — responsive page styles */
+
+/* ==============================================
+   CASHIER PORTAL - PREMIUM DASHBOARD THEME
+============================================== */
+
 .retail-page {
-    --retail-navy: #202C3D;
-    --retail-blue: #527AA3;
-    --retail-grey: #E9EEF2;
-    --retail-text: #263238;
-    --retail-border: #E1E7EC;
-    color: var(--retail-text);
+    --retail-bg: #101126;
+    --retail-card: #1a1c3a;
+    --retail-header: #202342;
+    --retail-input: #12152e;
+    --retail-border: #2d3154;
+    --retail-white: #f4f5ff;
+    --retail-muted: #a8b0d2;
+    --retail-purple: #a99aff;
+
     width: 100%;
     max-width: 1440px;
     min-width: 0;
     margin: 0 auto;
     padding: 0 0 1.5rem;
+    color: var(--retail-white);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     box-sizing: border-box;
 }
+
 .retail-page *,
 .retail-page *::before,
 .retail-page *::after {
     box-sizing: border-box;
 }
-.retail-page h2,
-.retail-page h3,
-.retail-page h5,
-.retail-page h6 {
-    color: var(--retail-navy);
-    letter-spacing: -0.02em;
+
+/* ==============================================
+   PAGE BACKGROUND - NO WHITE
+============================================== */
+
+body:has(.retail-page) {
+    background: #101126 !important;
+    color: #f4f5ff !important;
 }
+
+body:has(.retail-page) main,
+body:has(.retail-page) .main-content,
+body:has(.retail-page) .content-area,
+body:has(.retail-page) .content-wrapper,
+body:has(.retail-page) .app-content,
+body:has(.retail-page) .container-fluid {
+    background: #101126 !important;
+    color: #f4f5ff !important;
+}
+
+/* Keep the sidebar's existing dark design */
+.retail-page {
+    background: transparent !important;
+}
+
+/* ==============================================
+   CASHIER PAGE HEADING
+============================================== */
+
 .retail-page .page-heading {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
     min-width: 0;
 }
-.retail-page .page-heading > div {
-    min-width: 0;
-}
+
 .retail-page .page-heading h2 {
-    font-size: clamp(1.45rem, 2vw, 1.85rem);
+    color: #f5f4ff !important;
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
     line-height: 1.25;
-    font-weight: 650;
-    margin-bottom: .35rem;
-    overflow-wrap: anywhere;
+    font-weight: 750;
+    letter-spacing: -.8px;
+    margin-bottom: .4rem;
 }
+
 .retail-page .page-subtitle {
-    color: #71808D;
+    color: #a8b0d2 !important;
+    font-size: .96rem;
     margin: 0;
-    font-size: .95rem;
-    line-height: 1.5;
-    max-width: 100%;
-    overflow-wrap: anywhere;
+    line-height: 1.6;
 }
-.retail-page .retail-card {
-    width: 100%;
-    min-width: 0;
-    background: #fff;
-    border: 1px solid #E2E8ED;
-    border-radius: 12px;
-    box-shadow: 0 3px 14px rgba(32, 44, 61, .045);
-    overflow: hidden;
-}
-.retail-page .retail-card > .card-header {
-    background: #fff;
-    color: var(--retail-navy);
-    border-bottom: 1px solid var(--retail-grey);
-    padding: 1rem 1.25rem;
-    font-weight: 600;
-}
-.retail-page .retail-card > .card-body {
-    min-width: 0;
-    padding: 1.25rem;
-}
+
 .retail-page .section-kicker {
-    color: var(--retail-blue);
+    color: #8f82ff !important;
     font-size: .75rem;
-    font-weight: 700;
-    letter-spacing: .08em;
+    font-weight: 750;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: .35rem;
-}
-.retail-page .form-label {
-    color: #344454;
-    font-size: .9rem;
-    font-weight: 600;
     margin-bottom: .45rem;
 }
+
+/* ==============================================
+   MAIN CARDS
+============================================== */
+
+.retail-page .retail-card,
+.retail-page .card {
+    width: 100%;
+    min-width: 0;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    border: 1px solid #2c2e50 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .17);
+    overflow: hidden;
+}
+
+.retail-page .retail-card > .card-header {
+    background: #202342 !important;
+    color: #f5f4ff !important;
+    border-bottom: 1px solid #303454 !important;
+    padding: 1.15rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.retail-page .retail-card > .card-body {
+    min-width: 0;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    padding: 1.5rem;
+}
+
+/* Card headings */
+.retail-page .card h1,
+.retail-page .card h2,
+.retail-page .card h3,
+.retail-page .card h4,
+.retail-page .card h5,
+.retail-page .card h6,
+.retail-page .card-title {
+    color: #f0edff !important;
+    font-weight: 750;
+}
+
+/* ==============================================
+   CUSTOMER DETAILS
+============================================== */
+
+.retail-page .form-label {
+    display: block;
+    color: #c7c9e9 !important;
+    font-size: .9rem;
+    font-weight: 650;
+    margin-bottom: .55rem;
+}
+
+.retail-page .text-muted {
+    color: #9aa3c7 !important;
+}
+
+/* ==============================================
+   INPUTS AND DROPDOWNS
+============================================== */
+
 .retail-page .form-control,
 .retail-page .form-select {
     width: 100%;
     min-width: 0;
-    min-height: 42px;
-    border-color: #D8E0E7;
-    border-radius: 7px;
-    color: var(--retail-text);
-    background-color: #fff;
+    min-height: 46px;
+    background: #12152e !important;
+    color: #f5f5ff !important;
+    border: 1px solid #343858 !important;
+    border-radius: 10px !important;
+    padding: .7rem .9rem;
+    font-family: inherit;
+    font-size: .92rem;
+    box-shadow: none;
+    transition: border-color .2s, box-shadow .2s;
 }
+
+/* Placeholders */
+.retail-page .form-control::placeholder {
+    color: #858eaf !important;
+    opacity: 1;
+}
+
+/* Input focus */
 .retail-page .form-control:focus,
 .retail-page .form-select:focus {
-    border-color: var(--retail-blue);
-    box-shadow: 0 0 0 .2rem rgba(82, 122, 163, .14);
+    background: #151832 !important;
+    color: #ffffff !important;
+    border-color: #8974f5 !important;
+    box-shadow: 0 0 0 3px rgba(137, 116, 245, .18) !important;
+    outline: none;
 }
-.retail-page .btn {
-    max-width: 100%;
-    border-radius: 7px;
-    font-weight: 600;
-    padding: .58rem .95rem;
-    white-space: normal;
+
+/* Dropdown options */
+.retail-page .form-select option {
+    background: #1a1c3a;
+    color: #f5f5ff;
 }
-.retail-page .btn-primary {
-    background: var(--retail-blue);
-    border-color: var(--retail-blue);
+
+/* Number input controls */
+.retail-page input[type="number"] {
+    color-scheme: dark;
 }
-.retail-page .btn-primary:hover,
-.retail-page .btn-primary:focus {
-    background: #42698F;
-    border-color: #42698F;
-}
-.retail-page .btn-outline-primary {
-    color: var(--retail-blue);
-    border-color: #A9BED1;
-}
-.retail-page .btn-outline-primary:hover {
-    color: #fff;
-    background: var(--retail-blue);
-    border-color: var(--retail-blue);
-}
-.retail-page .btn-secondary {
-    background: var(--retail-grey);
-    border-color: var(--retail-grey);
-    color: #344454;
-}
-.retail-page .btn-secondary:hover {
-    background: #DCE4EA;
-    border-color: #DCE4EA;
-    color: var(--retail-navy);
-}
-.retail-page .btn-success {
-    background: #365F58;
-    border-color: #365F58;
-}
-.retail-page .btn-success:hover {
-    background: #2C504A;
-    border-color: #2C504A;
-}
-.retail-page .btn-danger {
-    background: #fff;
-    border: 1px solid #E3C9C9;
-    color: #9A4E4E;
-}
-.retail-page .btn-danger:hover {
-    background: #FAEEEE;
-    border-color: #D9B3B3;
-    color: #813E3E;
-}
+
+/* ==============================================
+   PURCHASE REWARD COUPON PANEL
+============================================== */
+
 .retail-page .coupon-panel {
     min-width: 0;
-    background: #F5F7F9;
-    border: 1px solid #E5EAEE;
-    border-radius: 9px;
+    background: #222544 !important;
+    color: #f4f5ff !important;
+    border: 1px solid #363a65 !important;
+    border-radius: 13px !important;
+    overflow: hidden;
 }
+
 .retail-page .coupon-panel .card-body {
-    padding: 1rem;
+    background: #222544 !important;
+    color: #e9ebff !important;
+    padding: 1.2rem;
 }
+
+.retail-page .coupon-panel h5 {
+    color: #d0c5ff !important;
+    font-size: 1.15rem;
+    font-weight: 750;
+    margin-bottom: .45rem;
+}
+
+.retail-page .coupon-panel p,
+.retail-page .coupon-panel .helper-text {
+    color: #a8b0d2 !important;
+}
+
+.retail-page .helper-text {
+    color: #a8b0d2 !important;
+    font-size: .86rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* Coupon information */
+.retail-page #couponMessage {
+    color: #a9b6da !important;
+}
+
+/* ==============================================
+   BUTTON BASE STYLE
+============================================== */
+
+.retail-page .btn {
+    max-width: 100%;
+    min-height: 44px;
+    border-radius: 10px !important;
+    padding: .7rem 1.15rem;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700 !important;
+    white-space: normal;
+    transition: all .2s ease;
+}
+
+/* Add to Bill */
+.retail-page .btn-primary {
+    background: linear-gradient(135deg, #665ee8, #a35cdd) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 5px 16px rgba(126, 94, 232, .2);
+}
+
+.retail-page .btn-primary:hover,
+.retail-page .btn-primary:focus {
+    background: linear-gradient(135deg, #796ff5, #b46de9) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(126, 94, 232, .3);
+}
+
+/* Load Coupons */
+.retail-page .btn-outline-primary {
+    background: #292b50 !important;
+    color: #bdb0ff !important;
+    border: 1px solid #7667da !important;
+}
+
+.retail-page .btn-outline-primary:hover {
+    background: linear-gradient(135deg, #665ee8, #a35cdd) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+/* Logout */
+.retail-page .btn-danger {
+    background: linear-gradient(135deg, #c74d70, #e36a82) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: 0 5px 15px rgba(220, 83, 114, .16);
+}
+
+.retail-page .btn-danger:hover {
+    background: linear-gradient(135deg, #df5d7d, #ef8095) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+/* Generate Bill */
+.retail-page .btn-success {
+    background: linear-gradient(135deg, #18a58e, #2796b5) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: 0 5px 15px rgba(24, 165, 142, .18);
+}
+
+.retail-page .btn-success:hover {
+    background: linear-gradient(135deg, #20b99e, #31a9cb) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+/* Remove item */
+.retail-page .btn-outline-danger,
+.retail-page .btn-danger:not(:first-child) {
+    color: #ffffff !important;
+}
+
+/* Secondary buttons */
+.retail-page .btn-secondary {
+    background: #272a49 !important;
+    color: #e4e5ff !important;
+    border: 1px solid #41466d !important;
+}
+
+/* ==============================================
+   CURRENT BILL TABLE
+============================================== */
+
 .retail-page .table-responsive {
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
 }
+
 .retail-page .table {
-    color: #344454;
+    --bs-table-bg: transparent;
+    --bs-table-color: #e9ebff;
+    --bs-table-border-color: #343858;
+    --bs-table-striped-bg: #202342;
+    --bs-table-striped-color: #e9ebff;
+    --bs-table-hover-bg: #292d50;
+    --bs-table-hover-color: #ffffff;
+
+    width: 100%;
     margin-bottom: 0;
+    color: #e9ebff !important;
+    background: #1a1c3a !important;
     vertical-align: middle;
 }
+
+.retail-page .table > :not(caption) > * > * {
+    background-color: #1a1c3a !important;
+    color: #e9ebff !important;
+    border-color: #343858 !important;
+    padding: .9rem .85rem;
+}
+
+/* Table headings */
 .retail-page .table thead th {
-    background: #F3F6F8;
-    color: #425466;
-    font-size: .82rem;
-    font-weight: 700;
+    background: #252849 !important;
+    color: #c6baff !important;
+    font-size: .8rem;
+    font-weight: 750;
+    letter-spacing: .5px;
+    text-transform: uppercase;
     white-space: nowrap;
-    border-bottom: 1px solid #DDE5EB;
-    padding: .85rem .8rem;
+    padding: 1rem .85rem;
+    border-color: #3b4066 !important;
 }
+
+/* Table content */
 .retail-page .table tbody td {
-    padding: .8rem;
-    border-color: var(--retail-grey);
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    border-color: #343858 !important;
 }
-.retail-page .table-bordered {
-    border-color: var(--retail-border);
-}
-.retail-page .table-striped > tbody > tr:nth-of-type(odd) > * {
-    background-color: #FAFBFC;
-}
+
+/* Hover */
 .retail-page .table tbody tr:hover > * {
-    background-color: #F5F8FA;
+    background: #292d50 !important;
+    color: #ffffff !important;
 }
+
+/* ==============================================
+   BILL TOTAL
+============================================== */
+
 .retail-page .total-line {
-    color: var(--retail-navy);
-    font-weight: 700;
-    font-size: 1.15rem;
+    color: #f2f1ff !important;
+    font-size: 1.25rem;
+    font-weight: 750;
 }
-.retail-page .helper-text {
-    color: #788692;
-    font-size: .84rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
+
+.retail-page .total-line span {
+    color: #b9a8ff !important;
 }
-.retail-page .modal-content {
-    border: 1px solid var(--retail-border);
-    border-radius: 12px;
-    box-shadow: 0 16px 45px rgba(32, 44, 61, .16);
+
+/* ==============================================
+   BILL MESSAGES
+============================================== */
+
+.retail-page #billMessage,
+.retail-page #couponMessage {
+    color: #b8c0df !important;
+    line-height: 1.6;
 }
-.retail-page .modal-header,
-.retail-page .modal-footer {
-    border-color: var(--retail-grey);
-    padding: 1rem 1.25rem;
+
+/* Success */
+.retail-page .alert-success {
+    background: #173c37 !important;
+    color: #a8f0d3 !important;
+    border: 1px solid #276c5d !important;
 }
-.retail-page .modal-title {
-    color: var(--retail-navy);
-    font-weight: 650;
+
+/* Error */
+.retail-page .alert-danger {
+    background: #472531 !important;
+    color: #ffc1cd !important;
+    border: 1px solid #874254 !important;
 }
-.retail-page .modal-body {
-    padding: 1.25rem;
+
+/* Warning */
+.retail-page .alert-warning {
+    background: #49391d !important;
+    color: #ffe0a0 !important;
+    border: 1px solid #80632b !important;
 }
-.retail-page .table-message,
-.retail-page #tableMessage {
-    margin-top: .85rem;
+
+/* ==============================================
+   NO WHITE BOOTSTRAP BACKGROUNDS
+============================================== */
+
+.retail-page .bg-white,
+.retail-page .bg-light,
+.retail-page .table-light,
+.retail-page .btn-light {
+    background: #202342 !important;
+    color: #f4f5ff !important;
 }
+
+/* ==============================================
+   RESPONSIVE DESIGN
+============================================== */
+
 @media (max-width: 767.98px) {
     .retail-page .page-heading {
         align-items: flex-start;
     }
-    .retail-page .page-heading > .btn,
-    .retail-page .page-heading > a {
-        align-self: flex-start;
+
+    .retail-page .retail-card > .card-body {
+        padding: 1rem;
     }
+
+    .retail-page .retail-card > .card-header {
+        padding: 1rem;
+    }
+
     .retail-page .row > * {
         min-width: 0;
     }
 }
+
 @media (max-width: 575.98px) {
-    .retail-page .retail-card > .card-body {
-        padding: 1rem;
-    }
-    .retail-page .retail-card > .card-header {
-        padding: .9rem 1rem;
-    }
     .retail-page .page-heading {
         gap: .85rem;
         margin-bottom: 1.2rem;
     }
-    .retail-page .page-heading .btn {
-        width: auto;
+
+    .retail-page .page-heading h2 {
+        font-size: 1.5rem;
     }
+
     .retail-page .coupon-panel .card-body {
         padding: .9rem;
     }
+
+    .retail-page .total-line {
+        font-size: 1.1rem;
+    }
 }
+
 </style>
 
 

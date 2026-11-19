@@ -4,87 +4,295 @@
 {% block content %}
 
 <style>
+
+/* ==============================================
+   PURCHASES PAGE - PREMIUM DASHBOARD THEME
+============================================== */
+
 .purchase-page {
-    color: #263238;
+    --purchase-bg: #101126;
+    --purchase-card: #1a1c3a;
+    --purchase-header: #202342;
+    --purchase-border: #2d3154;
+    --purchase-white: #f4f5ff;
+    --purchase-muted: #a8b0d2;
+    --purchase-purple: #a99aff;
+
+    width: 100%;
+    max-width: 1440px;
+    min-width: 0;
+    margin: 0 auto;
     padding: 12px 4px 30px;
+    color: var(--purchase-white);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    box-sizing: border-box;
 }
 
+.purchase-page *,
+.purchase-page *::before,
+.purchase-page *::after {
+    box-sizing: border-box;
+}
+
+/* ==============================================
+   PAGE BACKGROUND - NO WHITE
+============================================== */
+
+body:has(.purchase-page),
+body:has(.purchase-page) main,
+body:has(.purchase-page) .app-shell,
+body:has(.purchase-page) .main-content,
+body:has(.purchase-page) .content-area,
+body:has(.purchase-page) .content-wrapper,
+body:has(.purchase-page) .app-content,
+body:has(.purchase-page) .container-fluid {
+    background: #101126 !important;
+    color: #f4f5ff !important;
+}
+
+.purchase-page {
+    background: transparent !important;
+}
+
+/* ==============================================
+   PAGE HEADING
+============================================== */
+
 .purchase-page .page-heading {
-    color: #202C3D;
-    font-weight: 650;
-    letter-spacing: -0.4px;
+    color: #f5f4ff !important;
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
+    font-weight: 750;
+    letter-spacing: -0.8px;
 }
 
 .purchase-page .page-subtitle {
-    color: #718096;
-    font-size: 14px;
+    color: #a8b0d2 !important;
+    font-size: .9rem;
+    line-height: 1.6;
 }
+
+/* ==============================================
+   PURCHASE HISTORY CARD
+============================================== */
 
 .purchase-page .section-panel {
-    background: #FFFFFF;
-    border: 1px solid #E9EEF2;
-    border-radius: 10px;
+    width: 100%;
+    min-width: 0;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    border: 1px solid #2c2e50 !important;
+    border-radius: 16px !important;
     overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .17);
 }
 
+/* Card heading area */
 .purchase-page .section-heading {
-    padding: 18px 22px;
-    border-bottom: 1px solid #E9EEF2;
+    background: #202342 !important;
+    color: #f4f5ff !important;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #303454 !important;
 }
 
+/* Purchase History title */
 .purchase-page .section-heading h5 {
-    color: #202C3D;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 4px;
+    color: #f0edff !important;
+    font-size: 1.05rem;
+    font-weight: 750;
+    letter-spacing: -.2px;
+    margin-bottom: .4rem;
 }
 
+/* Purchase history subtitle */
+.purchase-page .section-heading .page-subtitle {
+    color: #a8b0d2 !important;
+    font-size: .85rem;
+}
+
+/* Card content */
 .purchase-page .section-body {
-    padding: 22px;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    padding: 1.5rem;
+}
+
+/* ==============================================
+   PURCHASE TABLE
+============================================== */
+
+.purchase-page .table-responsive {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
 }
 
 .purchase-page .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #e9ebff;
+    --bs-table-border-color: #343858;
+    --bs-table-hover-bg: #292d50;
+    --bs-table-hover-color: #ffffff;
+
+    width: 100%;
     margin-bottom: 0;
-    font-size: 13px;
-}
-
-.purchase-page .table thead th {
-    background: #F5F7F9;
-    color: #526171;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 14px;
-    border-bottom: 1px solid #E3E9EE;
-    white-space: nowrap;
-}
-
-.purchase-page .table tbody td {
-    color: #374151;
-    padding: 14px;
+    color: #e9ebff !important;
+    background: #1a1c3a !important;
+    font-size: .85rem;
     vertical-align: middle;
-    border-color: #EDF0F3;
 }
 
-.purchase-page .table-hover tbody tr:hover {
-    background: #F8FAFC;
+/* Table header */
+.purchase-page .table thead th {
+    background: #252849 !important;
+    color: #c6baff !important;
+    font-size: .78rem;
+    font-weight: 750;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 1rem .9rem;
+    white-space: nowrap;
+    border-bottom: 1px solid #3b4066 !important;
+    border-color: #3b4066 !important;
 }
 
+/* Table records */
+.purchase-page .table tbody td {
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    padding: .95rem .9rem;
+    vertical-align: middle;
+    border-color: #343858 !important;
+}
+
+/* Alternating rows - dark only */
+.purchase-page .table-hover tbody tr:nth-of-type(odd) td {
+    background: #202342 !important;
+    color: #e9ebff !important;
+}
+
+/* Hover effect */
+.purchase-page .table-hover tbody tr:hover td {
+    background: #292d50 !important;
+    color: #ffffff !important;
+}
+
+/* Empty table message */
+.purchase-page #purchaseMessage {
+    color: #a8b0d2 !important;
+    line-height: 1.6;
+}
+
+/* ==============================================
+   BUTTONS
+============================================== */
+
+/* Back to Dashboard */
 .purchase-page .btn-outline-secondary {
-    border-color: #DCE3E9;
-    color: #475569;
-    border-radius: 6px;
-    font-size: 14px;
+    background: #272a49 !important;
+    color: #d9d5ff !important;
+    border: 1px solid #625b9b !important;
+    border-radius: 10px !important;
+    padding: .7rem 1.15rem;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    transition: all .2s ease;
+}
+
+.purchase-page .btn-outline-secondary:hover {
+    background: #35395e !important;
+    color: #ffffff !important;
+    border-color: #9282ef !important;
+    transform: translateY(-1px);
+}
+
+/* Other buttons, if added later */
+.purchase-page .btn-primary {
+    background: linear-gradient(135deg, #665ee8, #a35cdd) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+
+.purchase-page .btn-success {
+    background: linear-gradient(135deg, #18a58e, #2796b5) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+}
+
+.purchase-page .btn-danger {
+    background: #d95372 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+}
+
+/* ==============================================
+   STATUS / ALERT MESSAGES
+============================================== */
+
+.purchase-page .alert-success {
+    background: #173c37 !important;
+    color: #a8f0d3 !important;
+    border: 1px solid #276c5d !important;
+}
+
+.purchase-page .alert-danger {
+    background: #472531 !important;
+    color: #ffc1cd !important;
+    border: 1px solid #874254 !important;
+}
+
+.purchase-page .alert-warning {
+    background: #49391d !important;
+    color: #ffe0a0 !important;
+    border: 1px solid #80632b !important;
+}
+
+/* No light Bootstrap backgrounds */
+.purchase-page .bg-white,
+.purchase-page .bg-light,
+.purchase-page .table-light {
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+}
+
+/* ==============================================
+   RESPONSIVE DESIGN
+============================================== */
+
+@media (max-width: 767.98px) {
+    .purchase-page .section-heading {
+        padding: 1rem;
+    }
+
+    .purchase-page .section-body {
+        padding: 1rem;
+    }
+
+    .purchase-page .table {
+        font-size: .8rem;
+    }
 }
 
 @media (max-width: 576px) {
-    .purchase-page .section-body {
-        padding: 14px;
+    .purchase-page {
+        padding: 8px 0 24px;
     }
 
     .purchase-page .page-heading {
-        font-size: 22px;
+        font-size: 1.4rem;
+    }
+
+    .purchase-page .section-body {
+        padding: .85rem;
     }
 }
+
 </style>
 
 <div class="purchase-page">

@@ -4,123 +4,456 @@
 {% block content %}
 
 <style>
+
+/* ==============================================
+   REPORTS PAGE - PREMIUM DASHBOARD THEME
+============================================== */
+
 .report-page {
-    color: #263238;
+    --report-bg: #101126;
+    --report-card: #1a1c3a;
+    --report-header: #202342;
+    --report-input: #12152e;
+    --report-border: #2d3154;
+    --report-white: #f4f5ff;
+    --report-muted: #a8b0d2;
+    --report-purple: #a99aff;
+
+    width: 100%;
+    max-width: 1440px;
+    min-width: 0;
+    margin: 0 auto;
     padding: 12px 4px 30px;
+    color: var(--report-white);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    box-sizing: border-box;
 }
 
+.report-page *,
+.report-page *::before,
+.report-page *::after {
+    box-sizing: border-box;
+}
+
+/* ==============================================
+   PAGE BACKGROUND - NO WHITE
+============================================== */
+
+body:has(.report-page),
+body:has(.report-page) main,
+body:has(.report-page) .app-shell,
+body:has(.report-page) .main-content,
+body:has(.report-page) .content-area,
+body:has(.report-page) .content-wrapper,
+body:has(.report-page) .app-content,
+body:has(.report-page) .container-fluid {
+    background: #101126 !important;
+    color: #f4f5ff !important;
+}
+
+.report-page {
+    background: transparent !important;
+}
+
+/* ==============================================
+   PAGE HEADING
+============================================== */
+
 .report-page .page-heading {
-    color: #202C3D;
-    font-weight: 650;
-    letter-spacing: -0.4px;
+    color: #f5f4ff !important;
+    font-size: clamp(1.5rem, 2vw, 1.9rem);
+    font-weight: 750;
+    letter-spacing: -.8px;
 }
 
 .report-page .page-subtitle {
-    color: #718096;
-    font-size: 14px;
+    color: #a8b0d2 !important;
+    font-size: .9rem;
+    line-height: 1.6;
 }
+
+/* ==============================================
+   REPORT PANELS
+============================================== */
 
 .report-page .report-panel {
-    background: #FFFFFF;
-    border: 1px solid #E9EEF2;
-    border-radius: 10px;
+    width: 100%;
+    min-width: 0;
+    background: #1a1c3a !important;
+    color: #f4f5ff !important;
+    border: 1px solid #2c2e50 !important;
+    border-radius: 16px !important;
     margin-bottom: 22px;
     overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .17);
 }
 
+/* Panel heading */
 .report-page .report-heading {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 17px 22px;
-    border-bottom: 1px solid #E9EEF2;
+    gap: 14px;
+    padding: 1.2rem 1.5rem;
+    background: #202342 !important;
+    color: #f4f5ff !important;
+    border-bottom: 1px solid #303454 !important;
 }
 
+/* Report titles */
 .report-page .report-heading h5 {
-    color: #202C3D;
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 3px;
+    color: #f0edff !important;
+    font-size: 1.05rem;
+    font-weight: 750;
+    margin: 0 0 .35rem;
 }
 
+/* Report descriptions */
 .report-page .report-description {
-    color: #718096;
-    font-size: 13px;
+    color: #a8b0d2 !important;
+    font-size: .85rem;
     margin: 0;
+    line-height: 1.5;
 }
 
+/* Number badges - purple gradient */
 .report-page .report-number {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    background: #EDF3F8;
-    color: #527AA3;
-    font-size: 14px;
-    font-weight: 600;
-    flex-shrink: 0;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #665ee8, #a35cdd) !important;
+    color: #ffffff !important;
+    font-size: .85rem;
+    font-weight: 800;
+    box-shadow: 0 5px 14px rgba(126, 94, 232, .22);
 }
 
+/* Panel body */
 .report-page .report-body {
-    padding: 22px;
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    padding: 1.5rem;
 }
+
+/* ==============================================
+   FORM LABELS
+============================================== */
 
 .report-page .form-label {
-    color: #374151;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 7px;
+    display: block;
+    color: #c7c9e9 !important;
+    font-size: .9rem;
+    font-weight: 650;
+    margin-bottom: .55rem;
 }
 
-.report-page .form-control {
-    border: 1px solid #DCE3E9;
-    border-radius: 6px;
-    min-height: 42px;
-    font-size: 14px;
+/* ==============================================
+   DATE, MONTH AND NUMBER INPUTS
+============================================== */
+
+.report-page .form-control,
+.report-page input {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    background: #12152e !important;
+    color: #f5f5ff !important;
+    border: 1px solid #343858 !important;
+    border-radius: 10px !important;
+    padding: .7rem .9rem;
+    font-family: inherit;
+    font-size: .92rem;
+    box-shadow: none;
+    transition: border-color .2s, box-shadow .2s;
 }
 
-.report-page .form-control:focus {
-    border-color: #527AA3;
-    box-shadow: 0 0 0 3px rgba(82, 122, 163, 0.12);
+/* Date and month picker */
+.report-page input[type="date"],
+.report-page input[type="month"] {
+    color-scheme: dark;
 }
 
+/* Placeholder */
+.report-page .form-control::placeholder {
+    color: #858eaf !important;
+    opacity: 1;
+}
+
+/* Focus */
+.report-page .form-control:focus,
+.report-page input:focus {
+    background: #151832 !important;
+    color: #ffffff !important;
+    border-color: #8974f5 !important;
+    box-shadow: 0 0 0 3px rgba(137, 116, 245, .18) !important;
+    outline: none;
+}
+
+/* ==============================================
+   BUTTONS
+============================================== */
+
+.report-page .btn {
+    min-height: 44px;
+    border-radius: 10px !important;
+    padding: .7rem 1.15rem;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700 !important;
+    transition: all .2s ease;
+}
+
+/* Generate Daily / Monthly / Top Products */
 .report-page .btn-primary {
-    background: #527AA3;
-    border-color: #527AA3;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 9px 16px;
-    min-height: 42px;
+    background: linear-gradient(135deg, #665ee8, #a35cdd) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 5px 16px rgba(126, 94, 232, .2);
 }
 
-.report-page .btn-primary:hover {
-    background: #405F80;
-    border-color: #405F80;
+.report-page .btn-primary:hover,
+.report-page .btn-primary:focus {
+    background: linear-gradient(135deg, #796ff5, #b46de9) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(126, 94, 232, .3);
 }
 
+/* Back to Dashboard */
 .report-page .btn-outline-secondary {
-    border-color: #DCE3E9;
-    color: #475569;
-    border-radius: 6px;
-    font-size: 14px;
+    background: #272a49 !important;
+    color: #ded8ff !important;
+    border: 1px solid #625b9b !important;
+}
+
+.report-page .btn-outline-secondary:hover {
+    background: #35395e !important;
+    color: #ffffff !important;
+    border-color: #9282ef !important;
+    transform: translateY(-1px);
+}
+
+/* ==============================================
+   DYNAMIC REPORT RESULTS
+   These styles apply to HTML inserted by JavaScript
+============================================== */
+
+.report-page #dailyReportResult,
+.report-page #monthlyReportResult,
+.report-page #topProductsResult {
+    color: #e9ebff !important;
+    margin-top: 1.25rem;
+}
+
+/* Dynamically generated cards */
+.report-page #dailyReportResult .card,
+.report-page #monthlyReportResult .card,
+.report-page #topProductsResult .card {
+    background: #202342 !important;
+    color: #f4f5ff !important;
+    border: 1px solid #363a65 !important;
+    border-radius: 13px !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.report-page #dailyReportResult .card-header,
+.report-page #monthlyReportResult .card-header,
+.report-page #topProductsResult .card-header {
+    background: #252849 !important;
+    color: #c6baff !important;
+    border-bottom: 1px solid #3b4066 !important;
+    font-weight: 750;
+}
+
+.report-page #dailyReportResult .card-body,
+.report-page #monthlyReportResult .card-body,
+.report-page #topProductsResult .card-body {
+    background: #202342 !important;
+    color: #e9ebff !important;
+}
+
+/* Generated headings */
+.report-page #dailyReportResult h1,
+.report-page #dailyReportResult h2,
+.report-page #dailyReportResult h3,
+.report-page #dailyReportResult h4,
+.report-page #dailyReportResult h5,
+.report-page #dailyReportResult h6,
+.report-page #monthlyReportResult h1,
+.report-page #monthlyReportResult h2,
+.report-page #monthlyReportResult h3,
+.report-page #monthlyReportResult h4,
+.report-page #monthlyReportResult h5,
+.report-page #monthlyReportResult h6,
+.report-page #topProductsResult h1,
+.report-page #topProductsResult h2,
+.report-page #topProductsResult h3,
+.report-page #topProductsResult h4,
+.report-page #topProductsResult h5,
+.report-page #topProductsResult h6 {
+    color: #d0c5ff !important;
+}
+
+/* Generated paragraph and supporting text */
+.report-page #dailyReportResult p,
+.report-page #monthlyReportResult p,
+.report-page #topProductsResult p,
+.report-page #dailyReportResult small,
+.report-page #monthlyReportResult small,
+.report-page #topProductsResult small,
+.report-page #dailyReportResult .text-muted,
+.report-page #monthlyReportResult .text-muted,
+.report-page #topProductsResult .text-muted {
+    color: #a8b0d2 !important;
+}
+
+/* Generated tables */
+.report-page #dailyReportResult .table,
+.report-page #monthlyReportResult .table,
+.report-page #topProductsResult .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #e9ebff;
+    --bs-table-border-color: #343858;
+
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    margin-bottom: 0;
+}
+
+.report-page #dailyReportResult .table th,
+.report-page #monthlyReportResult .table th,
+.report-page #topProductsResult .table th {
+    background: #252849 !important;
+    color: #c6baff !important;
+    border-color: #3b4066 !important;
+    font-size: .78rem;
+    font-weight: 750;
+}
+
+.report-page #dailyReportResult .table td,
+.report-page #monthlyReportResult .table td,
+.report-page #topProductsResult .table td {
+    background: #1a1c3a !important;
+    color: #e9ebff !important;
+    border-color: #343858 !important;
+}
+
+.report-page #dailyReportResult .table-striped > tbody > tr:nth-of-type(odd) > *,
+.report-page #monthlyReportResult .table-striped > tbody > tr:nth-of-type(odd) > *,
+.report-page #topProductsResult .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background: #202342 !important;
+    color: #e9ebff !important;
+}
+
+.report-page #dailyReportResult .table tbody tr:hover > *,
+.report-page #monthlyReportResult .table tbody tr:hover > *,
+.report-page #topProductsResult .table tbody tr:hover > * {
+    background: #292d50 !important;
+    color: #ffffff !important;
+}
+
+/* Generated summary values */
+.report-page #dailyReportResult strong,
+.report-page #monthlyReportResult strong,
+.report-page #topProductsResult strong {
+    color: #f0edff !important;
+}
+
+/* Generated badges */
+.report-page #dailyReportResult .badge,
+.report-page #monthlyReportResult .badge,
+.report-page #topProductsResult .badge {
+    color: #ffffff !important;
+}
+
+/* ==============================================
+   GENERATED ALERTS AND MESSAGES
+============================================== */
+
+.report-page .alert-success,
+.report-page #dailyReportResult .alert-success,
+.report-page #monthlyReportResult .alert-success,
+.report-page #topProductsResult .alert-success {
+    background: #173c37 !important;
+    color: #a8f0d3 !important;
+    border: 1px solid #276c5d !important;
+}
+
+.report-page .alert-danger,
+.report-page #dailyReportResult .alert-danger,
+.report-page #monthlyReportResult .alert-danger,
+.report-page #topProductsResult .alert-danger {
+    background: #472531 !important;
+    color: #ffc1cd !important;
+    border: 1px solid #874254 !important;
+}
+
+.report-page .alert-warning,
+.report-page #dailyReportResult .alert-warning,
+.report-page #monthlyReportResult .alert-warning,
+.report-page #topProductsResult .alert-warning {
+    background: #49391d !important;
+    color: #ffe0a0 !important;
+    border: 1px solid #80632b !important;
+}
+
+/* ==============================================
+   NO WHITE BOOTSTRAP BACKGROUNDS
+============================================== */
+
+.report-page .bg-white,
+.report-page .bg-light,
+.report-page .table-light,
+.report-page .btn-light,
+.report-page #dailyReportResult .bg-white,
+.report-page #monthlyReportResult .bg-white,
+.report-page #topProductsResult .bg-white,
+.report-page #dailyReportResult .bg-light,
+.report-page #monthlyReportResult .bg-light,
+.report-page #topProductsResult .bg-light {
+    background: #202342 !important;
+    color: #f4f5ff !important;
+}
+
+/* ==============================================
+   RESPONSIVE DESIGN
+============================================== */
+
+@media (max-width: 767.98px) {
+    .report-page .report-heading {
+        padding: 1rem;
+    }
+
+    .report-page .report-body {
+        padding: 1rem;
+    }
+
+    .report-page .report-number {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+    }
 }
 
 @media (max-width: 576px) {
-    .report-page .report-body {
-        padding: 16px;
+    .report-page {
+        padding: 8px 0 24px;
     }
 
     .report-page .page-heading {
-        font-size: 22px;
+        font-size: 1.4rem;
     }
 
-    .report-page .report-heading {
-        padding: 15px 16px;
+    .report-page .report-body {
+        padding: .85rem;
     }
 }
+
 </style>
 
 
