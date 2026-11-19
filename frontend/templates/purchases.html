@@ -3,47 +3,150 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Purchase Management</h2>
-    <a href="/dashboard" class="btn btn-secondary">
-        Back to Dashboard
-    </a>
-</div>
+<style>
+.purchase-page {
+    color: #263238;
+    padding: 12px 4px 30px;
+}
 
-<!-- Purchase History -->
-<div class="card">
+.purchase-page .page-heading {
+    color: #202C3D;
+    font-weight: 650;
+    letter-spacing: -0.4px;
+}
 
-    <div class="card-header">
-        <h5 class="mb-0">Purchase History</h5>
-    </div>
+.purchase-page .page-subtitle {
+    color: #718096;
+    font-size: 14px;
+}
 
-    <div class="card-body">
+.purchase-page .section-panel {
+    background: #FFFFFF;
+    border: 1px solid #E9EEF2;
+    border-radius: 10px;
+    overflow: hidden;
+}
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+.purchase-page .section-heading {
+    padding: 18px 22px;
+    border-bottom: 1px solid #E9EEF2;
+}
 
-                <thead>
-                    <tr>
-                        <th>Purchase ID</th>
-                        <th>Product Name</th>
-                        <th>SKU</th>
-                        <th>Quantity</th>
-                        <th>Cost Price</th>
-                        <th>Total Cost</th>
-                        <th>Purchased By</th>
-                        <th>Purchase Date</th>
-                    </tr>
-                </thead>
+.purchase-page .section-heading h5 {
+    color: #202C3D;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
 
-                <tbody id="purchaseTable">
-                </tbody>
+.purchase-page .section-body {
+    padding: 22px;
+}
 
-            </table>
+.purchase-page .table {
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+.purchase-page .table thead th {
+    background: #F5F7F9;
+    color: #526171;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 14px;
+    border-bottom: 1px solid #E3E9EE;
+    white-space: nowrap;
+}
+
+.purchase-page .table tbody td {
+    color: #374151;
+    padding: 14px;
+    vertical-align: middle;
+    border-color: #EDF0F3;
+}
+
+.purchase-page .table-hover tbody tr:hover {
+    background: #F8FAFC;
+}
+
+.purchase-page .btn-outline-secondary {
+    border-color: #DCE3E9;
+    color: #475569;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+@media (max-width: 576px) {
+    .purchase-page .section-body {
+        padding: 14px;
+    }
+
+    .purchase-page .page-heading {
+        font-size: 22px;
+    }
+}
+</style>
+
+<div class="purchase-page">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="page-heading mb-1">Purchase Management</h2>
+            <p class="page-subtitle mb-0">
+                View and track all inventory purchase transactions.
+            </p>
         </div>
 
-        <div id="purchaseMessage"></div>
+        <a href="/dashboard" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
 
     </div>
+
+
+    <!-- Purchase History -->
+    <div class="section-panel">
+
+        <div class="section-heading">
+            <h5>Purchase History</h5>
+            <small class="page-subtitle">
+                Records of products purchased for inventory.
+            </small>
+        </div>
+
+        <div class="section-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>Purchase ID</th>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Quantity</th>
+                            <th>Cost Price</th>
+                            <th>Total Cost</th>
+                            <th>Purchased By</th>
+                            <th>Purchase Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="purchaseTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div id="purchaseMessage" class="mt-3"></div>
+
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

@@ -3,105 +3,282 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Reports Management</h2>
+<style>
+.report-page {
+    color: #263238;
+    padding: 12px 4px 30px;
+}
 
-    <a href="/dashboard" class="btn btn-secondary">
-        Back to Dashboard
-    </a>
-</div>
+.report-page .page-heading {
+    color: #202C3D;
+    font-weight: 650;
+    letter-spacing: -0.4px;
+}
 
-<!-- Daily Sales Report -->
-<div class="card mb-4">
+.report-page .page-subtitle {
+    color: #718096;
+    font-size: 14px;
+}
 
-    <div class="card-header">
-        <h5 class="mb-0">Daily Sales Report</h5>
+.report-page .report-panel {
+    background: #FFFFFF;
+    border: 1px solid #E9EEF2;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+
+.report-page .report-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 17px 22px;
+    border-bottom: 1px solid #E9EEF2;
+}
+
+.report-page .report-heading h5 {
+    color: #202C3D;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 3px;
+}
+
+.report-page .report-description {
+    color: #718096;
+    font-size: 13px;
+    margin: 0;
+}
+
+.report-page .report-number {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #EDF3F8;
+    color: #527AA3;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.report-page .report-body {
+    padding: 22px;
+}
+
+.report-page .form-label {
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.report-page .form-control {
+    border: 1px solid #DCE3E9;
+    border-radius: 6px;
+    min-height: 42px;
+    font-size: 14px;
+}
+
+.report-page .form-control:focus {
+    border-color: #527AA3;
+    box-shadow: 0 0 0 3px rgba(82, 122, 163, 0.12);
+}
+
+.report-page .btn-primary {
+    background: #527AA3;
+    border-color: #527AA3;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 16px;
+    min-height: 42px;
+}
+
+.report-page .btn-primary:hover {
+    background: #405F80;
+    border-color: #405F80;
+}
+
+.report-page .btn-outline-secondary {
+    border-color: #DCE3E9;
+    color: #475569;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+@media (max-width: 576px) {
+    .report-page .report-body {
+        padding: 16px;
+    }
+
+    .report-page .page-heading {
+        font-size: 22px;
+    }
+
+    .report-page .report-heading {
+        padding: 15px 16px;
+    }
+}
+</style>
+
+
+<div class="report-page">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="page-heading mb-1">Reports Management</h2>
+            <p class="page-subtitle mb-0">
+                Generate sales summaries and review product performance.
+            </p>
+        </div>
+
+        <a href="/dashboard" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+
     </div>
 
-    <div class="card-body">
 
-        <div class="row align-items-end">
+    <!-- Daily Sales Report -->
+    <div class="report-panel">
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Select Date</label>
-                <input type="date" id="dailyReportDate"
-                    class="form-control">
-            </div>
+        <div class="report-heading">
 
-            <div class="col-md-3 mb-3">
-                <button class="btn btn-primary"
-                    onclick="loadDailyReport()">
-                    Generate Daily Report
-                </button>
+            <div class="report-number">01</div>
+
+            <div>
+                <h5>Daily Sales Report</h5>
+                <p class="report-description">
+                    View sales performance for a selected date.
+                </p>
             </div>
 
         </div>
 
-        <div id="dailyReportResult"></div>
+        <div class="report-body">
 
-    </div>
-</div>
+            <div class="row align-items-end">
 
-<!-- Monthly Sales Report -->
-<div class="card mb-4">
+                <div class="col-md-4 col-lg-3 mb-3">
+                    <label class="form-label">Select Date</label>
 
-    <div class="card-header">
-        <h5 class="mb-0">Monthly Sales Report</h5>
-    </div>
+                    <input type="date"
+                        id="dailyReportDate"
+                        class="form-control">
+                </div>
 
-    <div class="card-body">
+                <div class="col-md-4 mb-3">
 
-        <div class="row align-items-end">
+                    <button class="btn btn-primary"
+                        onclick="loadDailyReport()">
+                        Generate Daily Report
+                    </button>
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Select Month</label>
-                <input type="month" id="monthlyReportDate"
-                    class="form-control">
+                </div>
+
             </div>
 
-            <div class="col-md-3 mb-3">
-                <button class="btn btn-primary"
-                    onclick="loadMonthlyReport()">
-                    Generate Monthly Report
-                </button>
+            <div id="dailyReportResult"></div>
+
+        </div>
+    </div>
+
+
+    <!-- Monthly Sales Report -->
+    <div class="report-panel">
+
+        <div class="report-heading">
+
+            <div class="report-number">02</div>
+
+            <div>
+                <h5>Monthly Sales Report</h5>
+                <p class="report-description">
+                    Review sales performance for a selected month.
+                </p>
             </div>
 
         </div>
 
-        <div id="monthlyReportResult"></div>
+        <div class="report-body">
 
-    </div>
-</div>
+            <div class="row align-items-end">
 
-<!-- Top Selling Products -->
-<div class="card mb-4">
+                <div class="col-md-4 col-lg-3 mb-3">
+                    <label class="form-label">Select Month</label>
 
-    <div class="card-header">
-        <h5 class="mb-0">Top-Selling Products</h5>
-    </div>
+                    <input type="month"
+                        id="monthlyReportDate"
+                        class="form-control">
+                </div>
 
-    <div class="card-body">
+                <div class="col-md-4 mb-3">
 
-        <div class="row align-items-end">
+                    <button class="btn btn-primary"
+                        onclick="loadMonthlyReport()">
+                        Generate Monthly Report
+                    </button>
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Number of Products</label>
-                <input type="number" id="topProductLimit"
-                    class="form-control" value="5" min="1">
+                </div>
+
             </div>
 
-            <div class="col-md-3 mb-3">
-                <button class="btn btn-primary"
-                    onclick="loadTopProducts()">
-                    Show Top Products
-                </button>
+            <div id="monthlyReportResult"></div>
+
+        </div>
+    </div>
+
+
+    <!-- Top Selling Products -->
+    <div class="report-panel">
+
+        <div class="report-heading">
+
+            <div class="report-number">03</div>
+
+            <div>
+                <h5>Top-Selling Products</h5>
+                <p class="report-description">
+                    Identify the best-performing products by sales.
+                </p>
             </div>
 
         </div>
 
-        <div id="topProductsResult"></div>
+        <div class="report-body">
 
+            <div class="row align-items-end">
+
+                <div class="col-md-4 col-lg-3 mb-3">
+                    <label class="form-label">Number of Products</label>
+
+                    <input type="number"
+                        id="topProductLimit"
+                        class="form-control"
+                        value="5"
+                        min="1">
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <button class="btn btn-primary"
+                        onclick="loadTopProducts()">
+                        Show Top Products
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div id="topProductsResult"></div>
+
+        </div>
     </div>
+
 </div>
 
 {% endblock %}
