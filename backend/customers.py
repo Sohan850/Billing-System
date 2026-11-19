@@ -2,7 +2,7 @@
 import pymysql
 from flask import Blueprint, request, jsonify
 from config import get_db_connection
-from auth import admin_required
+from auth import roles_required
 
 # Create Customer Blueprint
 customers_bp = Blueprint('customers', __name__)
@@ -10,7 +10,7 @@ customers_bp = Blueprint('customers', __name__)
 
 # Add Customer API
 @customers_bp.route('/add', methods=['POST'])
-@admin_required
+@roles_required('admin', 'cashier')
 def add_customer():
 
     data = request.get_json(silent=True) or {}
@@ -100,7 +100,7 @@ def add_customer():
 
 # View All Customers API
 @customers_bp.route('/all', methods=['GET'])
-@admin_required
+@roles_required('admin', 'cashier')
 def get_all_customers():
 
     connection = None
@@ -138,7 +138,7 @@ def get_all_customers():
 
 # Search Customer API
 @customers_bp.route('/search', methods=['GET'])
-@admin_required
+@roles_required('admin', 'cashier')
 def search_customer():
 
     keyword = request.args.get('keyword', '').strip()
@@ -186,7 +186,7 @@ def search_customer():
 
 # Update Customer API
 @customers_bp.route('/update/<int:customer_id>', methods=['PUT'])
-@admin_required
+@roles_required('admin', 'cashier')
 def update_customer(customer_id):
 
     data = request.get_json(silent=True) or {}
@@ -289,7 +289,7 @@ def update_customer(customer_id):
 
 # Delete Customer API
 @customers_bp.route('/delete/<int:customer_id>', methods=['DELETE'])
-@admin_required
+@roles_required('admin', 'cashier')
 def delete_customer(customer_id):
 
     connection = None

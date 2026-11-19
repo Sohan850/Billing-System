@@ -156,8 +156,8 @@
             </p>
         </div>
 
-        <a href="/dashboard" class="btn btn-outline-secondary">
-            Back to Dashboard
+        <a href="{{ '/cashier' if session.get('role') == 'cashier' else '/dashboard' }}" class="btn btn-outline-secondary">
+            {{ 'Back to Cashier' if session.get('role') == 'cashier' else 'Back to Dashboard' }}
         </a>
 
     </div>
