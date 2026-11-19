@@ -1386,14 +1386,19 @@ async function deleteMembership(membershipId) {
     }
 }
 
+
+
 // =====================================
 // DAILY SALES REPORT
 // =====================================
 
 async function loadDailyReport() {
 
-    const selectedDate = document.getElementById("dailyReportDate").value;
-    const resultDiv = document.getElementById("dailyReportResult");
+    const selectedDate =
+        document.getElementById("dailyReportDate").value;
+
+    const resultDiv =
+        document.getElementById("dailyReportResult");
 
     if (!selectedDate) {
         resultDiv.innerHTML =
@@ -1417,54 +1422,126 @@ async function loadDailyReport() {
 
         let rows = "";
 
-        result.sales.forEach(sale => {
+        let totalProductSales = 0;
+
+        result.products.forEach(product => {
+
+            const salesPrice = Number(product.total_sales_price);
+            const productCost = Number(product.total_cost);
+            const profit = Number(product.total_profit);
+
+            totalProductSales += salesPrice;
+
+            const profitClass = profit >= 0
+                ? "text-success"
+                : "text-danger";
 
             rows += `
                 <tr>
-                    <td>${sale.sale_id}</td>
-                    <td>${sale.customer_name || "Walk-in Customer"}</td>
-                    <td>₹${sale.total_amount}</td>
-                    <td>${new Date(sale.sale_date).toLocaleString()}</td>
+                    <td>${product.product_name}</td>
+                    <td>${product.sku}</td>
+                    <td>${product.total_quantity_sold}</td>
+                    <td>₹${salesPrice.toFixed(2)}</td>
+                    <td>₹${productCost.toFixed(2)}</td>
+                    <td class="${profitClass}">
+                        <strong>₹${profit.toFixed(2)}</strong>
+                    </td>
                 </tr>
             `;
-
         });
 
+        const totalRevenue = Number(result.total_revenue);
+        const totalCost = Number(result.total_cost);
+        const totalProfit = Number(result.total_profit);
+
+        const overallProfitClass = totalProfit >= 0
+            ? "text-success"
+            : "text-danger";
+
         resultDiv.innerHTML = `
-            <h6 class="mt-3">Report Date: ${result.date}</h6>
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="alert alert-info">
-                        Total Bills: <strong>${result.total_bills}</strong>
+            <h6 class="mt-3">
+                Report Date: ${result.date}
+            </h6>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-4">
+
+                <div class="col">
+                    <div class="alert alert-info mb-0">
+                        Total Bills:
+                        <strong>${result.total_bills}</strong>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="alert alert-success">
-                        Total Revenue: <strong>₹${result.total_revenue}</strong>
+                <div class="col">
+                    <div class="alert alert-success mb-0">
+                        Total Revenue:
+                        <strong>₹${totalRevenue.toFixed(2)}</strong>
                     </div>
                 </div>
+
+                <div class="col">
+                    <div class="alert alert-primary mb-0">
+                        Total Product Sales:
+                        <strong>₹${totalProductSales.toFixed(2)}</strong>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="alert alert-warning mb-0">
+                        Total Cost:
+                        <strong>₹${totalCost.toFixed(2)}</strong>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="alert alert-light border mb-0">
+                        Estimated Profit:
+                        <strong class="${overallProfitClass}">
+                            ₹${totalProfit.toFixed(2)}
+                        </strong>
+                    </div>
+                </div>
+
             </div>
 
-            <h6>Sales Details</h6>
+            <h6>Products Sold and Profit Details</h6>
 
             <div class="table-responsive">
+
                 <table class="table table-bordered table-striped">
+
                     <thead>
                         <tr>
-                            <th>Sale ID</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Date & Time</th>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Quantity Sold</th>
+                            <th>Total Sales Price</th>
+                            <th>Total Cost</th>
+                            <th>Estimated Profit</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        ${rows || '<tr><td colspan="4" class="text-center">No sales found.</td></tr>'}
+
+                        ${rows || `
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    No products sold on this date.
+                                </td>
+                            </tr>
+                        `}
+
                     </tbody>
+
                 </table>
+
             </div>
+
+            <small class="text-muted">
+                Profit is estimated using the current product cost price
+                and includes allocated membership and coupon discounts.
+            </small>
         `;
 
     } catch (error) {
@@ -1475,14 +1552,19 @@ async function loadDailyReport() {
     }
 }
 
+
+
 // =====================================
 // MONTHLY SALES REPORT
 // =====================================
 
 async function loadMonthlyReport() {
 
-    const selectedMonth = document.getElementById("monthlyReportDate").value;
-    const resultDiv = document.getElementById("monthlyReportResult");
+    const selectedMonth =
+        document.getElementById("monthlyReportDate").value;
+
+    const resultDiv =
+        document.getElementById("monthlyReportResult");
 
     if (!selectedMonth) {
         resultDiv.innerHTML =
@@ -1506,58 +1588,127 @@ async function loadMonthlyReport() {
 
         let rows = "";
 
-        result.sales.forEach(sale => {
+        let totalProductSales = 0;
+
+        result.products.forEach(product => {
+
+            const salesPrice = Number(product.total_sales_price);
+            const productCost = Number(product.total_cost);
+            const profit = Number(product.total_profit);
+
+            totalProductSales += salesPrice;
+
+            const profitClass = profit >= 0
+                ? "text-success"
+                : "text-danger";
 
             rows += `
                 <tr>
-                    <td>${sale.sale_id}</td>
-                    <td>${sale.customer_name || "Walk-in Customer"}</td>
-                    <td>₹${sale.total_amount}</td>
-                    <td>${new Date(sale.sale_date).toLocaleString()}</td>
+                    <td>${product.product_name}</td>
+                    <td>${product.sku}</td>
+                    <td>${product.total_quantity_sold}</td>
+                    <td>₹${salesPrice.toFixed(2)}</td>
+                    <td>₹${productCost.toFixed(2)}</td>
+                    <td class="${profitClass}">
+                        <strong>₹${profit.toFixed(2)}</strong>
+                    </td>
                 </tr>
             `;
-
         });
 
+        const totalRevenue = Number(result.total_revenue);
+        const totalCost = Number(result.total_cost);
+        const totalProfit = Number(result.total_profit);
+
+        const overallProfitClass = totalProfit >= 0
+            ? "text-success"
+            : "text-danger";
+
         resultDiv.innerHTML = `
-            <h6 class="mt-3">Report Month: ${result.month}</h6>
 
-            <div class="row mb-3">
+            <h6 class="mt-3">
+                Report Month: ${result.month}
+            </h6>
 
-                <div class="col-md-6">
-                    <div class="alert alert-info">
-                        Total Bills: <strong>${result.total_bills}</strong>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-4">
+
+                <div class="col">
+                    <div class="alert alert-info mb-0">
+                        Total Bills:
+                        <strong>${result.total_bills}</strong>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="alert alert-success">
-                        Total Revenue: <strong>₹${result.total_revenue}</strong>
+                <div class="col">
+                    <div class="alert alert-success mb-0">
+                        Total Revenue:
+                        <strong>₹${totalRevenue.toFixed(2)}</strong>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="alert alert-primary mb-0">
+                        Total Product Sales:
+                        <strong>₹${totalProductSales.toFixed(2)}</strong>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="alert alert-warning mb-0">
+                        Total Cost:
+                        <strong>₹${totalCost.toFixed(2)}</strong>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="alert alert-light border mb-0">
+                        Estimated Profit:
+                        <strong class="${overallProfitClass}">
+                            ₹${totalProfit.toFixed(2)}
+                        </strong>
                     </div>
                 </div>
 
             </div>
 
-            <h6>Sales Details</h6>
+            <h6>Monthly Products Sold and Profit Details</h6>
 
             <div class="table-responsive">
+
                 <table class="table table-bordered table-striped">
 
                     <thead>
                         <tr>
-                            <th>Sale ID</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
-                            <th>Date & Time</th>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Quantity Sold</th>
+                            <th>Total Sales Price</th>
+                            <th>Total Cost</th>
+                            <th>Estimated Profit</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        ${rows || '<tr><td colspan="4" class="text-center">No sales found.</td></tr>'}
+
+                        ${rows || `
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    No products sold during this month.
+                                </td>
+                            </tr>
+                        `}
+
                     </tbody>
 
                 </table>
+
             </div>
+
+            <small class="text-muted">
+                Profit is estimated using the current product cost price
+                and includes allocated membership and coupon discounts.
+            </small>
+
         `;
 
     } catch (error) {
@@ -1567,6 +1718,7 @@ async function loadMonthlyReport() {
 
     }
 }
+
 
 // =====================================
 // TOP-SELLING PRODUCTS REPORT
@@ -1739,4 +1891,325 @@ if (cashierForm) {
             submitButton.textContent = "Create Cashier";
         }
     });
+}
+
+// =====================================
+// SALES BOOK MANAGEMENT
+// =====================================
+
+// Escape database values before displaying them in HTML.
+function escapeSalesBookHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+
+// Load sales between selected dates
+async function loadSalesBook() {
+
+    const fromDate =
+        document.getElementById("salesBookFromDate").value;
+
+    const toDate =
+        document.getElementById("salesBookToDate").value;
+
+    const table =
+        document.getElementById("salesBookTable");
+
+    const message =
+        document.getElementById("salesBookMessage");
+
+    const detailsPanel =
+        document.getElementById("salesBookDetailsPanel");
+
+    if (!fromDate || !toDate) {
+        message.innerHTML =
+            '<div class="alert alert-warning">Please select both dates.</div>';
+        return;
+    }
+
+    if (fromDate > toDate) {
+        message.innerHTML =
+            '<div class="alert alert-warning">From Date cannot be after To Date.</div>';
+        return;
+    }
+
+    message.textContent = "Loading sales...";
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center">Loading sales...</td>
+        </tr>
+    `;
+
+    detailsPanel.style.display = "none";
+
+    try {
+
+        const response = await fetch(
+            `/api/billing/book?from_date=${encodeURIComponent(fromDate)}&to_date=${encodeURIComponent(toDate)}`,
+            {
+                credentials: "same-origin"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            message.innerHTML = `
+                <div class="alert alert-danger">
+                    ${escapeSalesBookHTML(result.message)}
+                </div>
+            `;
+            table.innerHTML = "";
+            return;
+        }
+
+        // Calculate the combined final bill amount.
+        const totalAmount = result.sales.reduce(
+            (total, sale) => total + Number(sale.total_amount),
+            0
+        );
+
+        document.getElementById("salesBookTotalBills").textContent =
+            result.total_bills;
+
+        document.getElementById("salesBookTotalAmount").textContent =
+            "₹" + totalAmount.toFixed(2);
+
+        table.innerHTML = "";
+
+        if (result.sales.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No sales found for the selected date range.
+                    </td>
+                </tr>
+            `;
+
+        } else {
+
+            result.sales.forEach(sale => {
+
+                const row = document.createElement("tr");
+                row.className = "sales-book-row";
+                row.style.cursor = "pointer";
+                row.tabIndex = 0;
+                row.setAttribute("role", "button");
+                row.setAttribute(
+                    "aria-label",
+                    `View bill ${sale.sale_id}`
+                );
+
+                row.innerHTML = `
+                    <td>#${escapeSalesBookHTML(sale.sale_id)}</td>
+
+                    <td>
+                        ${escapeSalesBookHTML(
+                            sale.customer_name || "Walk-in Customer"
+                        )}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ₹${Number(sale.total_amount).toFixed(2)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeSalesBookHTML(sale.sale_date)}
+                    </td>
+
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"
+                                type="button">
+                            View Bill
+                        </button>
+                    </td>
+                `;
+
+                row.addEventListener("click", function() {
+                    openSalesBookBill(sale.sale_id, row);
+                });
+
+                row.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openSalesBookBill(sale.sale_id, row);
+                    }
+                });
+
+                table.appendChild(row);
+            });
+        }
+
+        message.innerHTML = `
+            <div class="alert alert-success">
+                Sales loaded successfully.
+                Showing ${result.total_bills} bill(s).
+            </div>
+        `;
+
+    } catch (error) {
+
+        message.innerHTML = `
+            <div class="alert alert-danger">
+                Could not connect to the server.
+            </div>
+        `;
+    }
+}
+
+
+// =====================================
+// VIEW SELECTED BILL DETAILS
+// =====================================
+
+async function openSalesBookBill(saleId, selectedRow) {
+
+    const detailsPanel =
+        document.getElementById("salesBookDetailsPanel");
+
+    const itemsTable =
+        document.getElementById("salesBookItemsTable");
+
+    const detailsMessage =
+        document.getElementById("salesBookDetailsMessage");
+
+    // Highlight the selected bill.
+    document.querySelectorAll(".sales-book-row").forEach(row => {
+        row.classList.remove("table-primary");
+    });
+
+    if (selectedRow) {
+        selectedRow.classList.add("table-primary");
+    }
+
+    detailsPanel.style.display = "block";
+
+    document.getElementById("detailSaleId").textContent =
+        "#" + saleId;
+
+    document.getElementById("detailCustomerName").textContent =
+        "Loading...";
+
+    document.getElementById("detailBillAmount").textContent =
+        "Loading...";
+
+    itemsTable.innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center">
+                Loading bill details...
+            </td>
+        </tr>
+    `;
+
+    detailsMessage.textContent = "";
+
+    try {
+
+        const response = await fetch(
+            `/api/billing/${saleId}`,
+            {
+                credentials: "same-origin"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Could not retrieve bill details."
+            );
+        }
+
+        const bill = result.bill;
+
+        document.getElementById("detailSaleId").textContent =
+            "#" + bill.sale_id;
+
+        document.getElementById("detailCustomerName").textContent =
+            bill.customer_name || "Walk-in Customer";
+
+        document.getElementById("detailBillAmount").textContent =
+            "₹" + Number(bill.total_amount).toFixed(2);
+
+        itemsTable.innerHTML = "";
+
+        if (!bill.items || bill.items.length === 0) {
+
+            itemsTable.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No products found in this bill.
+                    </td>
+                </tr>
+            `;
+
+        } else {
+
+            bill.items.forEach(item => {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>
+                        ${escapeSalesBookHTML(item.product_name)}
+                    </td>
+
+                    <td>
+                        ${escapeSalesBookHTML(item.sku)}
+                    </td>
+
+                    <td>
+                        ${item.quantity}
+                    </td>
+
+                    <td>
+                        ₹${Number(item.unit_price).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ₹${Number(item.subtotal).toFixed(2)}
+                    </td>
+                `;
+
+                itemsTable.appendChild(row);
+            });
+        }
+
+        detailsMessage.innerHTML = `
+            <div class="alert alert-success mt-3">
+                Bill details loaded successfully.
+            </div>
+        `;
+
+        detailsPanel.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    } catch (error) {
+
+        itemsTable.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-danger">
+                    Could not load bill details.
+                </td>
+            </tr>
+        `;
+
+        detailsMessage.innerHTML = `
+            <div class="alert alert-danger">
+                ${escapeSalesBookHTML(error.message)}
+            </div>
+        `;
+    }
 }

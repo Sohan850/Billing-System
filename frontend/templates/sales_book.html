@@ -1,0 +1,308 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.sales-book-page {
+    color: #263238;
+    padding: 12px 4px 30px;
+}
+
+.sales-book-page .page-heading {
+    color: #202C3D;
+    font-weight: 650;
+}
+
+.sales-book-page .page-subtitle {
+    color: #718096;
+    font-size: 14px;
+}
+
+.sales-book-page .sales-panel {
+    background: #FFFFFF;
+    border: 1px solid #E9EEF2;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+
+.sales-book-page .panel-heading {
+    padding: 17px 22px;
+    border-bottom: 1px solid #E9EEF2;
+    font-weight: 600;
+    color: #202C3D;
+}
+
+.sales-book-page .panel-body {
+    padding: 22px;
+}
+
+.sales-book-page .form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.sales-book-page .form-control {
+    border: 1px solid #DCE3E9;
+    border-radius: 6px;
+    min-height: 42px;
+}
+
+.sales-book-page .btn-primary {
+    background: #527AA3;
+    border-color: #527AA3;
+    border-radius: 6px;
+    min-height: 42px;
+}
+
+.sales-book-page .sales-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.sales-book-page .sales-row:hover {
+    background-color: #EDF3F8;
+}
+
+.sales-book-page .sales-row.active {
+    background-color: #E5EEF7;
+}
+
+.sales-book-page .sales-row:focus {
+    outline: 2px solid #527AA3;
+    outline-offset: -2px;
+}
+
+.sales-book-page .detail-label {
+    color: #718096;
+    font-size: 13px;
+}
+
+.sales-book-page .detail-value {
+    color: #202C3D;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .sales-book-page .panel-body {
+        padding: 16px;
+    }
+}
+</style>
+
+
+<div class="sales-book-page">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="page-heading mb-1">Sales Book</h2>
+
+            <p class="page-subtitle mb-0">
+                View bills and purchased products within a selected date range.
+            </p>
+        </div>
+
+        <a href="/dashboard" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- Date Filter -->
+    <div class="sales-panel">
+
+        <div class="panel-heading">
+            Filter Sales by Date
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row align-items-end g-3">
+
+                <div class="col-md-4">
+                    <label for="salesBookFromDate" class="form-label">
+                        From Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="salesBookFromDate"
+                        class="form-control"
+                    >
+                </div>
+
+
+                <div class="col-md-4">
+                    <label for="salesBookToDate" class="form-label">
+                        To Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="salesBookToDate"
+                        class="form-control"
+                    >
+                </div>
+
+
+                <div class="col-md-4">
+                    <button
+                        type="button"
+                        class="btn btn-primary w-100"
+                        onclick="loadSalesBook()"
+                    >
+                        Show Sales
+                    </button>
+                </div>
+
+            </div>
+
+            <div id="salesBookMessage" class="mt-3"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Sales Summary -->
+    <div class="row mb-3">
+
+        <div class="col-md-6">
+            <div class="alert alert-info">
+                Total Bills:
+                <strong id="salesBookTotalBills">0</strong>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="alert alert-success">
+                Total Bill Amount:
+                <strong id="salesBookTotalAmount">₹0.00</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Sales List -->
+    <div class="sales-panel">
+
+        <div class="panel-heading d-flex justify-content-between align-items-center">
+
+            <span>Sales List</span>
+
+            <small class="text-muted">
+                Select a bill to view purchased items
+            </small>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Sale ID</th>
+                            <th>Customer Name</th>
+                            <th>Bill Amount</th>
+                            <th>Date & Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="salesBookTable">
+
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                Select a date range to view sales.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Selected Bill Details -->
+    <div class="sales-panel" id="salesBookDetailsPanel" style="display: none;">
+
+        <div class="panel-heading">
+            Selected Bill Details
+        </div>
+
+        <div class="panel-body">
+
+            <!-- Bill Information -->
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-4">
+                    <div class="detail-label">Sale ID</div>
+                    <div class="detail-value" id="detailSaleId">-</div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="detail-label">Customer Name</div>
+                    <div class="detail-value" id="detailCustomerName">-</div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="detail-label">Bill Amount</div>
+                    <div class="detail-value" id="detailBillAmount">₹0.00</div>
+                </div>
+
+            </div>
+
+
+            <h6 class="mb-3">Products Purchased</h6>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="salesBookItemsTable">
+
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Select a bill to view its products.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div id="salesBookDetailsMessage"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

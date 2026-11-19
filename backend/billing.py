@@ -4,6 +4,7 @@ from config import get_db_connection
 from auth import admin_required, billing_access_required
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 import secrets
+from datetime import datetime, timedelta
 
 
 billing_bp = Blueprint('billing', __name__)
@@ -451,6 +452,108 @@ def get_customer_coupons(customer_id):
         if connection:
             connection.close()
 
+
+# --------------------------------------------------
+# SALES BOOK - FILTER BILLS BY DATE RANGE
+# --------------------------------------------------
+
+@billing_bp.route('/book', methods=['GET'])
+@admin_required
+def get_sales_book():
+
+    from_date = request.args.get('from_date')
+    to_date = request.args.get('to_date')
+
+    # Validate required dates
+    if not from_date or not to_date:
+        return jsonify({
+            "message": "Both From Date and To Date are required"
+        }), 400
+
+    try:
+        start_date = datetime.strptime(
+            from_date, '%Y-%m-%d'
+        ).date()
+
+        end_date = datetime.strptime(
+            to_date, '%Y-%m-%d'
+        ).date()
+
+    except ValueError:
+        return jsonify({
+            "message": "Invalid date format. Use YYYY-MM-DD"
+        }), 400
+
+    if start_date > end_date:
+        return jsonify({
+            "message": "From Date cannot be after To Date"
+        }), 400
+
+    connection = None
+
+    try:
+        connection = get_db_connection()
+
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+                    s.sale_id,
+                    s.customer_id,
+                    COALESCE(c.customer_name, 'Walk-in Customer')
+                        AS customer_name,
+                    s.total_amount,
+                    s.discount_amount,
+                    s.sale_date
+
+                FROM sales s
+
+                LEFT JOIN customers c
+                    ON s.customer_id = c.customer_id
+
+                WHERE s.sale_date >= %s
+                  AND s.sale_date < %s
+
+                ORDER BY s.sale_date DESC, s.sale_id DESC
+
+            """, (
+                start_date,
+                end_date + timedelta(days=1)
+            ))
+
+            sales = cursor.fetchall()
+
+        # Convert values into JSON-safe strings
+        for sale in sales:
+
+            sale['total_amount'] = str(
+                sale['total_amount']
+            )
+
+            sale['discount_amount'] = str(
+                sale['discount_amount']
+            )
+
+            sale['sale_date'] = sale['sale_date'].strftime(
+                '%Y-%m-%d %H:%M:%S'
+            )
+
+        return jsonify({
+            "message": "Sales Book retrieved successfully",
+            "from_date": str(start_date),
+            "to_date": str(end_date),
+            "total_bills": len(sales),
+            "sales": sales
+        }), 200
+
+    except Exception:
+        return jsonify({
+            "message": "Could not retrieve Sales Book"
+        }), 500
+
+    finally:
+        if connection:
+            connection.close()
 
 # --------------------------------------------------
 # 3. VIEW ALL SALES

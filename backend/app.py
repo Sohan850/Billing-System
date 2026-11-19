@@ -113,6 +113,12 @@ def memberships_page():
 def reports_page():
     return render_template('reports.html')
 
+# Sales Book page
+@app.route('/sales-book')
+@page_role_required('admin')
+def sales_book_page():
+    return render_template('sales_book.html')
+
 
 # --------------------------------------------------
 # CASHIER PORTAL
