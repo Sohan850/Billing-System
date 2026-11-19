@@ -1,7 +1,7 @@
 
 from flask import Blueprint, request, jsonify
 from config import get_db_connection
-from auth import admin_required
+from auth import roles_required
 from datetime import datetime
 
 
@@ -35,7 +35,7 @@ def validate_membership_dates(start_date, end_date):
 
 # Add Membership API
 @members_bp.route('/add', methods=['POST'])
-@admin_required
+@roles_required('admin', 'cashier')
 def add_membership():
 
     data = request.get_json(silent=True)
@@ -159,7 +159,7 @@ def add_membership():
 
 # View All Memberships API
 @members_bp.route('/all', methods=['GET'])
-@admin_required
+@roles_required('admin', 'cashier')
 def get_all_memberships():
 
     connection = None
@@ -206,7 +206,7 @@ def get_all_memberships():
 
 # Search Membership API
 @members_bp.route('/search', methods=['GET'])
-@admin_required
+@roles_required('admin', 'cashier')
 def search_membership():
 
     keyword = request.args.get('keyword', '').strip()
@@ -270,7 +270,7 @@ def search_membership():
 
 # Update Membership API
 @members_bp.route('/update/<int:membership_id>', methods=['PUT'])
-@admin_required
+@roles_required('admin', 'cashier')
 def update_membership(membership_id):
 
     data = request.get_json(silent=True)
@@ -386,7 +386,7 @@ def update_membership(membership_id):
 
 # Delete Membership API
 @members_bp.route('/delete/<int:membership_id>', methods=['DELETE'])
-@admin_required
+@roles_required('admin', 'cashier')
 def delete_membership(membership_id):
 
     connection = None
