@@ -274,7 +274,7 @@
             <h2>Billing Management</h2>
             <p class="page-subtitle">Create customer bills and apply available purchase rewards.</p>
         </div>
-        <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{{ '/cashier' if session.get('role') == 'cashier' else '/dashboard' }}" class="btn btn-secondary">{{ 'Back to Cashier' if session.get('role') == 'cashier' else 'Back to Dashboard' }}</a>
     </div>
 
     <!-- Customer Selection -->
