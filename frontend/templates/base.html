@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,27 +8,14 @@
     <title>Billing & Inventory Management System</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="{% if request.endpoint == 'login_page' %}login-page{% elif request.endpoint == 'cashier_page' %}cashier-page{% else %}admin-page{% endif %}">
+<body class="{% if request.endpoint == 'login_page' %}login-page{% elif session.get('role') == 'cashier' %}cashier-page{% else %}admin-page{% endif %}">
 
     {% if request.endpoint == 'login_page' %}
 
         <main class="login-wrapper">
-
-    {% elif request.endpoint == 'cashier_page' %}
-
-        <header class="cashier-topbar">
-            <div class="cashier-brand">
-                <span class="brand-mark">B</span>
-                <span>Billing & Inventory</span>
-            </div>
-            <span class="cashier-label">Cashier Portal</span>
-        </header>
-
-        <main class="cashier-main">
 
     {% else %}
 
@@ -41,7 +27,7 @@
                     <span class="brand-mark">B</span>
                     <div>
                         <h5>Billing & Inventory</h5>
-                        <small>Management System</small>
+                        <small>{% if session.get('role') == 'cashier' %}Cashier Portal{% else %}Management System{% endif %}</small>
                     </div>
                 </div>
 
@@ -50,25 +36,31 @@
 
                     <nav class="sidebar-nav">
 
-                        <a href="/dashboard" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">Dashboard</a>
+                        {% if session.get('role') == 'cashier' %}
 
-                        <a href="/billing" class="{% if request.endpoint == 'billing_page' %}active{% endif %}">Billing</a>
+                            <a href="/cashier" class="{% if request.endpoint == 'cashier_page' %}active{% endif %}">Point of Sale</a>
+                            <a href="/billing" class="{% if request.endpoint == 'billing_page' %}active{% endif %}">Billing</a>
+                            <a href="/customers" class="{% if request.endpoint == 'customers_page' %}active{% endif %}">Customers</a>
+                            <a href="/memberships" class="{% if request.endpoint == 'memberships_page' %}active{% endif %}">Memberships</a>
 
-                        <a href="/products" class="{% if request.endpoint == 'products_page' %}active{% endif %}">Products</a>
+                        {% else %}
 
-                        <a href="/purchases" class="{% if request.endpoint == 'purchases_page' %}active{% endif %}">Purchases</a>
+                            <a href="/dashboard" class="{% if request.endpoint == 'dashboard_page' %}active{% endif %}">Dashboard</a>
+                            <a href="/billing" class="{% if request.endpoint == 'billing_page' %}active{% endif %}">Billing</a>
+                            <a href="/products" class="{% if request.endpoint == 'products_page' %}active{% endif %}">Products</a>
+                            <a href="/purchases" class="{% if request.endpoint == 'purchases_page' %}active{% endif %}">Purchases</a>
+                            <a href="/customers" class="{% if request.endpoint == 'customers_page' %}active{% endif %}">Customers</a>
+                            <a href="/memberships" class="{% if request.endpoint == 'memberships_page' %}active{% endif %}">Memberships</a>
+                            <a href="/reports" class="{% if request.endpoint == 'reports_page' %}active{% endif %}">Reports</a>
 
-                        <a href="/customers" class="{% if request.endpoint == 'customers_page' %}active{% endif %}">Customers</a>
-
-                        <a href="/memberships" class="{% if request.endpoint == 'memberships_page' %}active{% endif %}">Memberships</a>
-
-                        <a href="/reports" class="{% if request.endpoint == 'reports_page' %}active{% endif %}">Reports</a>
+                        {% endif %}
 
                     </nav>
                 </div>
 
                 <div class="sidebar-footer">
-                    <small>Inventory & Sales Management</small>
+                    <div>{{ session.get('username', 'User') }}</div>
+                    <small>{% if session.get('role') == 'cashier' %}Cashier workspace{% else %}Inventory & Sales Management{% endif %}</small>
                 </div>
 
             </aside>
@@ -81,7 +73,7 @@
     {% block content %}
     {% endblock %}
 
-    {% if request.endpoint == 'login_page' or request.endpoint == 'cashier_page' %}
+    {% if request.endpoint == 'login_page' %}
 
         </main>
 
@@ -94,7 +86,6 @@
     {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 </body>
