@@ -457,7 +457,7 @@ def get_customer_coupons(customer_id):
 # --------------------------------------------------
 
 @billing_bp.route('/all', methods=['GET'])
-@admin_required
+@billing_access_required
 def get_all_sales():
 
     connection = None
@@ -514,7 +514,7 @@ def get_all_sales():
 # --------------------------------------------------
 
 @billing_bp.route('/<int:sale_id>', methods=['GET'])
-@admin_required
+@billing_access_required
 def get_bill_details(sale_id):
 
     connection = None
