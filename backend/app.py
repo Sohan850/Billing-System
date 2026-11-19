@@ -85,13 +85,13 @@ def products_page():
 
 
 @app.route('/billing')
-@page_role_required('admin')
+@page_role_required('admin', 'cashier')
 def billing_page():
     return render_template('billing.html')
 
 
 @app.route('/customers')
-@page_role_required('admin')
+@page_role_required('admin', 'cashier')
 def customers_page():
     return render_template('customers.html')
 
@@ -103,7 +103,7 @@ def purchases_page():
 
 
 @app.route('/memberships')
-@page_role_required('admin')
+@page_role_required('admin', 'cashier')
 def memberships_page():
     return render_template('memberships.html')
 
